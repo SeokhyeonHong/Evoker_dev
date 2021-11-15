@@ -6,17 +6,18 @@ using UnityEngine;
 public class TextScript : MonoBehaviour
 {
     private int mEmotionNum;
-    private PyServer server = new PyServer();
+    private GameObject serverObject;
+    private PyServer server;
     Text mText;
     // Start is called before the first frame update
     void Start()
     {
         mEmotionNum = 6;
-        server.Start();
+        serverObject = GameObject.Find("ServerObject");
+        server = serverObject.GetComponent<PyServer>();
         mText = GetComponent<Text>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(mEmotionNum != 6)
