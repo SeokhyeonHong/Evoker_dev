@@ -14,6 +14,7 @@ public class PyServer : MonoBehaviour
     private TcpClient connectedClient;
     private float[] emotionScores;
     private string[] emotionNames;
+    public bool bConnected = false;
     
     public enum eEmotion
     {
@@ -52,6 +53,7 @@ public class PyServer : MonoBehaviour
                 using(connectedClient = server.AcceptTcpClient()) {
                     using(NetworkStream ns = connectedClient.GetStream()) {
                         int length;
+                        bConnected = false;
                         while((length = ns.Read(bytes, 0, bytes.Length)) != 0) {
                             var incomingData = new byte[length];
 							Array.Copy(bytes, 0, incomingData, 0, length);
@@ -61,6 +63,8 @@ public class PyServer : MonoBehaviour
                                 string strFloat = Encoding.ASCII.GetString(incomingData, i * 4, 4);
                                 emotionScores[i] = float.Parse(strFloat);
                             }
+
+                            bConnected = true;
                         }
                     }
                 }

@@ -33,7 +33,10 @@ public class ObjectRecolor : MonoBehaviour
         }
 
         PyServer ps = server.GetComponent<PyServer>();
-        float score = ps.GetScore(mi_EmotionNum);
-        isMono = score > 0.5f ? 0 : 1;
+        if(ps.bConnected)
+        {
+            float score = ps.GetScore(mi_EmotionNum);
+            isMono = score > 0.5f ? 0 : 1;
+        }
     }
 }
