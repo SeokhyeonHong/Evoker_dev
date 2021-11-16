@@ -24,13 +24,19 @@ public class TextScript : MonoBehaviour
         {
             float score = server.GetScore(mEmotionNum);
             string name = server.GetName(mEmotionNum);
-            mText.text = name + " " + score.ToString();
+            if(score > 0.5f)
+            {
+                mText.text = name + " Success!";
+            }
+            else
+            {
+                mText.text = "Be more " + name + "!";
+            }
         }
         else
         {
             mText.text = "Select an emotion!";
         }
-        Debug.Log(mEmotionNum);
     }
 
     void OnDestroy()

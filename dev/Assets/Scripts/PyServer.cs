@@ -23,7 +23,7 @@ public class PyServer : MonoBehaviour
     public void Start()
     {
         emotionScores = new float[7];
-        emotionNames = new string[] {"angry", "disgust", "fear", "happy", "sad", "surprise", "neutral"};
+        emotionNames = new string[] {"Angry", "Disgust", "Fear", "Happy", "Sad", "Surprised", "Neutral"};
         serverThread = new Thread(new ThreadStart(ListenRequests));
         serverThread.IsBackground = true;
         serverThread.Start();
