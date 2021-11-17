@@ -22,6 +22,8 @@ while True:
         for score in emotions.values():
             val += "{:.2f}".format(score)
         # val = emotion_name + ' ' + str(emotion_score)
+        
         sock.send(val.encode())
     
-    time.sleep(0.33)
+    cv2.imshow("face", frame)
+    cv2.waitKey(33)
