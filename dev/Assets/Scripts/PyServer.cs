@@ -31,18 +31,21 @@ public class PyServer : MonoBehaviour
 
     public void OnDestroy()
     {
-        try {
+        try
+        {
             serverThread.Abort();
             server.Stop();
         }
-        catch(Exception e) {
+        catch(Exception e)
+        {
             Debug.Log(e.ToString());
         }
     }
 
     void ListenRequests()
     {
-        try {
+        try
+        {
             int port = 50003;
             server = new TcpListener(IPAddress.Parse("127.0.0.1"), port);
             server.Start();
@@ -50,16 +53,20 @@ public class PyServer : MonoBehaviour
 
             Byte[] bytes = new Byte[1024];
             while(true) {
-                using(connectedClient = server.AcceptTcpClient()) {
-                    using(NetworkStream ns = connectedClient.GetStream()) {
+                using(connectedClient = server.AcceptTcpClient())
+                {
+                    using(NetworkStream ns = connectedClient.GetStream())
+                    {
                         int length;
                         bConnected = false;
-                        while((length = ns.Read(bytes, 0, bytes.Length)) != 0) {
+                        while((length = ns.Read(bytes, 0, bytes.Length)) != 0)
+                        {
                             var incomingData = new byte[length];
 							Array.Copy(bytes, 0, incomingData, 0, length);
 							
                             // Convert byte array to float
-                            for(int i = 0; i < length / 4; ++i) {
+                            for(int i = 0; i < length / 4; ++i)
+                            {
                                 string strFloat = Encoding.ASCII.GetString(incomingData, i * 4, 4);
                                 emotionScores[i] = float.Parse(strFloat);
                             }
@@ -70,10 +77,12 @@ public class PyServer : MonoBehaviour
                 }
             }
         }
-        catch(SocketException e) {
+        catch(SocketException e)
+        {
             Debug.Log("SocketException: " + e.ToString());
         }
-        finally {
+        finally
+        {
             server.Stop();
         }
     }

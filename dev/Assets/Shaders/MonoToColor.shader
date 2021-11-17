@@ -25,13 +25,13 @@
         };
 
         fixed4 _Color;
-        int isMono;
+        int Colored;
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             // Albedo comes from a texture tinted by color
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-            if(isMono == 1)
+            if(Colored == 0)
             {
                 fixed avg = (c.r + c.g + c.b) / 3;
                 o.Albedo = fixed3(avg, avg, avg);

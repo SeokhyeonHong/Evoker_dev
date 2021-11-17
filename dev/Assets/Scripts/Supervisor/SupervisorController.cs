@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
-public class MoveSupervisor : MonoBehaviour
+public class SupervisorController : MonoBehaviour
 {
     private Animator m_Animator;
     private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
     private float mf_NewX, mf_NewZ, mf_Angle;
     private Quaternion m_NewQuat;
+    private GameObject m_PlayerObject;
     private float mf_NextMoveTime = 0f;
     public void SetRange(float minX, float minZ, float maxX, float maxZ)
     {
@@ -19,6 +21,7 @@ public class MoveSupervisor : MonoBehaviour
         transform.position = new Vector3((minX + maxX) / 2, 0, (minZ + maxZ) / 2);
 
         m_Animator = GetComponent<Animator>();
+        m_PlayerObject = GameObject.Find("PlayerObject");
     }
 
     public void Move()
@@ -56,6 +59,22 @@ public class MoveSupervisor : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, m_NewQuat, Time.deltaTime * Mathf.Abs(mf_Angle) * 0.05f);
         m_Animator.SetBool("bMoving", true);
+    }
+
+    public void DetectGameEnd()
+    {
+        float dist = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
+        Text text = GameObject.Find("Canvas/EndMessage").GetComponent<Text>();
+        if(dist < 5.0f)
+        {
+            // Text text = GameObject.Find("Canvas/UserMessage").GetComponent<Text>();
+            text.text = "Game End!";
+        }
+        else
+        {
+            text.text = "Not End Yet";
+        }
+
     }
 
 }
