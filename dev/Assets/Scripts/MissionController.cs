@@ -10,7 +10,6 @@ public class MissionController : MonoBehaviour
     private int mi_FailCount = 0;
     private float mf_ElapsedTime = 0.0f;
     private List<bool> m_SuccessList;
-    private List<Material> m_ChildMaterials;
     private GameObject m_PlayerObject, m_ServerObject, m_NeighborObject;
     private GameObject m_SupervisorObj1, m_SupervisorObj2;
     private Text m_Text;
@@ -26,43 +25,19 @@ public class MissionController : MonoBehaviour
         m_SupervisorObj1.SetActive(true);
         m_SupervisorObj2.SetActive(false);
 
-        m_ChildMaterials = new List<Material>();
         m_SuccessList = new List<bool>();
 
         m_Text = GameObject.Find("Canvas/MissionMessage").GetComponent<Text>();
         m_Text.text = "";
-
-        for(int i = 0; i < transform.childCount; ++i)
-        {
-            Renderer rend = transform.GetChild(i).gameObject.GetComponent<Renderer>();
-            if(rend != null)
-            {
-                m_ChildMaterials.Add(rend.material);
-            }
-        }
-        Renderer rend_neighbor = m_NeighborObject.transform.Find("Mesh").gameObject.GetComponent<Renderer>();
-        if(rend_neighbor != null)
-        {
-            m_ChildMaterials.Add(rend_neighbor.material);
-        }
     }
 
     void Update()
     {
-        Color();
         if(mi_Success == 0)
         {
             DoMission();
         }
         
-    }
-
-    void Color()
-    {
-        for(int i = 0; i < m_ChildMaterials.Count; ++i)
-        {
-            m_ChildMaterials[i].SetInt("Colored", mi_Success);
-        }
     }
 
     void DoMission()
@@ -101,6 +76,7 @@ public class MissionController : MonoBehaviour
             if(s_rate > 0.7f)
             {
                 mi_Success = 1;
+                GetComponent<ColorController>().Success();
                 m_Text.text = "";
                 m_SuccessList.Clear();
                 return;

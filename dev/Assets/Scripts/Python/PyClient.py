@@ -15,6 +15,7 @@ while True:
         break
 
     result = emotion_detector.detect_emotions(frame)
+    
     if len(result) > 0:
         emotions = result[0]['emotions']
 
@@ -25,5 +26,4 @@ while True:
         
         sock.send(val.encode())
     
-    cv2.imshow("face", frame)
     cv2.waitKey(33)
