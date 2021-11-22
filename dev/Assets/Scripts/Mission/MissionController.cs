@@ -11,7 +11,6 @@ public class MissionController : MonoBehaviour
     private float mf_ElapsedTime = 0.0f;
     private List<bool> m_SuccessList;
     private GameObject m_PlayerObject, m_ServerObject, m_NeighborObject;
-    private GameObject m_SupervisorObj1, m_SupervisorObj2;
     private Text m_Text;
 
     void Start()
@@ -19,11 +18,6 @@ public class MissionController : MonoBehaviour
         m_PlayerObject = GameObject.Find("PlayerObject");
         m_ServerObject = GameObject.Find("ServerObject");
         m_NeighborObject = transform.Find("Neighbor").gameObject;
-        m_SupervisorObj1 = transform.Find("Supervisor1").gameObject;
-        m_SupervisorObj2 = transform.Find("Supervisor2").gameObject;
-
-        m_SupervisorObj1.SetActive(true);
-        m_SupervisorObj2.SetActive(false);
 
         m_SuccessList = new List<bool>();
 
@@ -81,46 +75,6 @@ public class MissionController : MonoBehaviour
                 m_SuccessList.Clear();
                 return;
             }
-
-            if(mf_ElapsedTime > 5.0f)
-            {
-                if(mi_FailCount < 3)
-                {
-                    m_Text.text = "Fail! Penalty will be given";
-                }
-                else
-                {
-                    mi_FailCount++;
-                    return;
-                }
-            }
-            if(mf_ElapsedTime > 8.0f)
-            {
-                mi_FailCount++;
-                mf_ElapsedTime = 0.0f;
-                switch(mi_FailCount)
-                {
-                    case 1:
-                    m_SupervisorObj1.GetComponent<SupervisorController>().SpeedUp();
-                    break;
-
-                    case 2:
-                    m_SupervisorObj1.GetComponent<SupervisorController>().SearchScaleUp();
-                    break;
-
-                    case 3:
-                    m_SupervisorObj2.SetActive(true);
-                    m_SupervisorObj2.GetComponent<SupervisorController>().SpeedUp();
-                    m_SupervisorObj2.GetComponent<SupervisorController>().SearchScaleUp();
-                    break;
-
-                    default:
-                    break;
-                }
-                m_SuccessList.Clear();
-            }
-
-            mf_ElapsedTime += Time.deltaTime;
         }
         else
         {
