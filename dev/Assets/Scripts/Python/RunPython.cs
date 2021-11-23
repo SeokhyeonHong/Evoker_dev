@@ -24,10 +24,5 @@ public class RunPython : MonoBehaviour
             UnityEngine.Debug.LogError("RunPython.cs Exception: " + e.Message);
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
 }
 

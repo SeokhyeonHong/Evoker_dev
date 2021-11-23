@@ -9,11 +9,11 @@ using UnityEngine;
 
 public class PyServer : MonoBehaviour
 {
-    private TcpListener server;
-    private Thread serverThread;
-    private TcpClient connectedClient;
-    private float[] emotionScores;
-    private string[] emotionNames;
+    private TcpListener m_Server;
+    private Thread m_ServerThread;
+    private TcpClient m_ConnectedClient;
+    private float[] mf_EmotionScores;
+    private string[] ms_EmotionNames;
     public bool bConnected = false;
     
     public enum eEmotion
@@ -22,19 +22,19 @@ public class PyServer : MonoBehaviour
     }
     public void Start()
     {
-        emotionScores = new float[7];
-        emotionNames = new string[] {"Angry", "Disgust", "Fear", "Happy", "Sad", "Surprised", "Neutral"};
-        serverThread = new Thread(new ThreadStart(ListenRequests));
-        serverThread.IsBackground = true;
-        serverThread.Start();
+        mf_EmotionScores = new float[7];
+        ms_EmotionNames = new string[] {"Angry", "Disgust", "Fear", "Happy", "Sad", "Surprised", "Neutral"};
+        m_ServerThread = new Thread(new ThreadStart(ListenRequests));
+        m_ServerThread.IsBackground = true;
+        m_ServerThread.Start();
     }
 
     public void OnDestroy()
     {
         try
         {
-            serverThread.Abort();
-            server.Stop();
+            m_ServerThread.Abort();
+            m_Server.Stop();
         }
         catch(Exception e)
         {
@@ -47,15 +47,15 @@ public class PyServer : MonoBehaviour
         try
         {
             int port = 50003;
-            server = new TcpListener(IPAddress.Parse("127.0.0.1"), port);
-            server.Start();
+            m_Server = new TcpListener(IPAddress.Parse("127.0.0.1"), port);
+            m_Server.Start();
             Debug.Log("Server is Listening!");
 
             Byte[] bytes = new Byte[1024];
             while(true) {
-                using(connectedClient = server.AcceptTcpClient())
+                using(m_ConnectedClient = m_Server.AcceptTcpClient())
                 {
-                    using(NetworkStream ns = connectedClient.GetStream())
+                    using(NetworkStream ns = m_ConnectedClient.GetStream())
                     {
                         int length;
                         bConnected = false;
@@ -68,7 +68,7 @@ public class PyServer : MonoBehaviour
                             for(int i = 0; i < length / 4; ++i)
                             {
                                 string strFloat = Encoding.ASCII.GetString(incomingData, i * 4, 4);
-                                emotionScores[i] = float.Parse(strFloat);
+                                mf_EmotionScores[i] = float.Parse(strFloat);
                             }
 
                             bConnected = true;
@@ -83,7 +83,7 @@ public class PyServer : MonoBehaviour
         }
         finally
         {
-            server.Stop();
+            m_Server.Stop();
         }
     }
 
@@ -93,6 +93,6 @@ public class PyServer : MonoBehaviour
         
     }
 
-    public float GetScore(int idx) => emotionScores[idx];
-    public string GetName(int idx) => emotionNames[idx];
+    public float GetScore(int idx) => mf_EmotionScores[idx];
+    public string GetName(int idx) => ms_EmotionNames[idx];
 }

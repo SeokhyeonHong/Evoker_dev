@@ -10,6 +10,7 @@ public class CharacterController : MonoBehaviour
     private float mf_Smooth = 5f;
     private float mf_Move = 1f;
     private bool mb_MoveLeft, mb_MoveRight, mb_MoveForward, mb_MoveBackward;
+    private bool mb_Run;
     void Start()
     {
         m_Animator = GetComponent<Animator>();
@@ -27,12 +28,24 @@ public class CharacterController : MonoBehaviour
     void Move()
     {
         Vector3 vTarget = transform.position;
+        vTarget.y = 0f;
+        
         Quaternion qTarget = transform.rotation;
 
         mb_MoveForward = Input.GetKey(KeyCode.W);
         mb_MoveBackward = Input.GetKey(KeyCode.S);
         mb_MoveLeft = Input.GetKey(KeyCode.A);
         mb_MoveRight = Input.GetKey(KeyCode.D);
+        mb_Run = Input.GetKey(KeyCode.Space);
+
+        if(mb_Run)
+        {
+            mf_Move = 1.5f;
+        }
+        else
+        {
+            mf_Move = 1f;
+        }
 
         if(mb_MoveForward && mb_MoveLeft) {
             vTarget.x -= mf_Move / Mathf.Sqrt(2);
@@ -70,6 +83,7 @@ public class CharacterController : MonoBehaviour
             vTarget.x += mf_Move;
             qTarget = Quaternion.Euler(0, 90, 0);
         }
+
         transform.position = Vector3.Lerp(transform.position, vTarget, Time.deltaTime * mf_Smooth);
         transform.rotation = Quaternion.Slerp(transform.rotation, qTarget , Time.deltaTime * mf_Smooth);
     }
@@ -79,11 +93,21 @@ public class CharacterController : MonoBehaviour
         if(mb_MoveForward || mb_MoveBackward || mb_MoveLeft || mb_MoveRight)
         {
             m_Animator.SetBool("bMoving", true);
+            if(mb_Run)
+            {
+                m_Animator.SetBool("bRunning", true);
+            }
+            else
+            {
+                m_Animator.SetBool("bRunning", false);
+            }
         }
         else
         {
             m_Animator.SetBool("bMoving", false);
+            m_Animator.SetBool("bRunning", false);
         }
+
     }
 
     void CameraUpdate()
