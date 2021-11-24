@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -14,11 +12,20 @@ public class PyServer : MonoBehaviour
     private TcpClient m_ConnectedClient;
     private float[] mf_EmotionScores;
     private string[] ms_EmotionNames;
-    public bool bConnected = false;
+    private bool mb_Connected = false;
     
     public enum eEmotion
     {
         ANGRY, DISGUST, FEAR, HAPPY, SAD, SUPRIRSE, NEUTRAL
+    }
+    void Awake()
+    {
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("Server");
+        if(objs.Length > 1)
+        {
+            Destroy(this.gameObject);
+        }
+        DontDestroyOnLoad(this.gameObject);
     }
     public void Start()
     {
@@ -29,7 +36,7 @@ public class PyServer : MonoBehaviour
         m_ServerThread.Start();
     }
 
-    public void OnDestroy()
+    void OnDestroy()
     {
         try
         {
@@ -38,7 +45,7 @@ public class PyServer : MonoBehaviour
         }
         catch(Exception e)
         {
-            Debug.Log(e.ToString());
+            Debug.Log("PyServer OnDestroy(): " + e.ToString());
         }
     }
 
@@ -58,7 +65,7 @@ public class PyServer : MonoBehaviour
                     using(NetworkStream ns = m_ConnectedClient.GetStream())
                     {
                         int length;
-                        bConnected = false;
+                        mb_Connected = false;
                         while((length = ns.Read(bytes, 0, bytes.Length)) != 0)
                         {
                             var incomingData = new byte[length];
@@ -69,9 +76,10 @@ public class PyServer : MonoBehaviour
                             {
                                 string strFloat = Encoding.ASCII.GetString(incomingData, i * 4, 4);
                                 mf_EmotionScores[i] = float.Parse(strFloat);
+                                // Debug.Log(mf_EmotionScores[i]);
                             }
 
-                            bConnected = true;
+                            mb_Connected = true;
                         }
                     }
                 }
@@ -95,4 +103,5 @@ public class PyServer : MonoBehaviour
 
     public float GetScore(int idx) => mf_EmotionScores[idx];
     public string GetName(int idx) => ms_EmotionNames[idx];
+    public bool GetConnected() => mb_Connected;
 }

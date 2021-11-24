@@ -49,7 +49,7 @@ public class MissionController : MonoBehaviour
         }
 
         PyServer ps = m_ServerObject.GetComponent<PyServer>();
-        if(ps.bConnected)
+        if(ps.GetConnected())
         {
             
             float score = ps.GetScore(emotionNum);

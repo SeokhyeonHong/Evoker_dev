@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterController : MonoBehaviour
 {
@@ -11,11 +12,17 @@ public class CharacterController : MonoBehaviour
     private float mf_Move = 1f;
     private bool mb_MoveLeft, mb_MoveRight, mb_MoveForward, mb_MoveBackward;
     private bool mb_Run;
+
+    public int[] mi_Gauges = new int[5];
     void Start()
     {
         m_Animator = GetComponent<Animator>();
         m_Camera = Camera.main;
         m_Camera.transform.rotation = Quaternion.AngleAxis(10f, Vector3.right);
+        for(int i = 0; i < mi_Gauges.Length; ++i)
+        {
+            mi_Gauges[i] = 5;
+        }
     }
 
     void Update()
@@ -113,5 +120,19 @@ public class CharacterController : MonoBehaviour
     void CameraUpdate()
     {
         m_Camera.transform.position = transform.position + m_CameraTrans;
+    }
+
+    public int GetEmotionGauge(int idx)
+    {
+        return mi_Gauges[idx];
+    }
+
+    public void DecreaseGauge(int idx, int decrease)
+    {
+        mi_Gauges[idx] -= decrease;
+        if(mi_Gauges[idx] == 0)
+        {
+            // SceneManager.LoadScene("")
+        }
     }
 }

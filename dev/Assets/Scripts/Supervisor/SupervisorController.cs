@@ -8,11 +8,13 @@ public class SupervisorController : MonoBehaviour
     public GameObject moveRangeObject;
     private Animator m_Animator;
     private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
-    private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed, mf_SearchScale;
+    private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
     private Quaternion m_NewQuat;
-    private GameObject m_PlayerObject, m_RangeObject;
-    private Text m_Text;
-    private float mf_NextMoveTime = 0f;
+    private GameObject m_PlayerObject;
+    private float mf_NextMoveTime = 0f, mf_MissionTimeElapsed = 0f;
+    public int mi_MissionEmotion = 0;
+    public float mf_Score = 0f;
+    private bool mb_MissionFinished = false;
 
     void Start()
     {
@@ -20,23 +22,20 @@ public class SupervisorController : MonoBehaviour
 
         m_Animator = GetComponent<Animator>();
         m_PlayerObject = GameObject.Find("PlayerObject");
-        m_Text = GameObject.Find("Canvas/EndMessage").GetComponent<Text>();
-        m_RangeObject = transform.Find("Range").gameObject;
         mf_Speed = 1.0f;
-        mf_SearchScale = 3.0f;
     }
 
     void Update()
     {
-        if(isActiveAndEnabled)
+        float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
+        if(distance > 5.0f)
         {
             Move();
-            DetectGameEnd();
-            if(m_RangeObject != null)
-            {
-                m_RangeObject.transform.localScale = new Vector3(mf_SearchScale, 0.01f, mf_SearchScale);
-                m_RangeObject.transform.position = transform.position;
-            }
+            mb_MissionFinished = false;
+        }
+        else if(!mb_MissionFinished)
+        {
+            ThrowMission();
         }
     }
 
@@ -59,9 +58,6 @@ public class SupervisorController : MonoBehaviour
         {
             float dx = (2 * Random.Range(0, 2) - 1) * weight;
             float dz = (2 * Random.Range(0, 2) - 1) * weight;
-
-            // float dx = Random.Range(-1f, 1f) * weight;
-            // float dz = Random.Range(-1f, 1f) * weight;
             
             float normalize = Mathf.Sqrt(dx * dx + dz * dz);
             if(normalize > 0.0001f)
@@ -88,23 +84,24 @@ public class SupervisorController : MonoBehaviour
         m_Animator.SetBool("bMoving", true);
     }
 
-    void DetectGameEnd()
+    void ThrowMission()
     {
-        float dist = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
-        if(dist < mf_SearchScale)
+        m_Animator.SetBool("bMoving", false);
+        if(mf_MissionTimeElapsed < 5.0f)
         {
-            m_Text.text = "Game End!";
+            mf_MissionTimeElapsed += Time.deltaTime;
+            if(mf_Score > 0.5f)
+            {
+                m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_MissionEmotion, 1);
+                mb_MissionFinished = true;
+                mf_MissionTimeElapsed = 0f;
+            }
+        }
+        else
+        {
+            m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_MissionEmotion, 2);
+            mb_MissionFinished = true;
+            mf_MissionTimeElapsed = 0f;
         }
     }
-
-    public void SpeedUp()
-    {
-        mf_Speed *= 2;
-    }
-
-    public void SearchScaleUp()
-    {
-        mf_SearchScale *= 2;
-    }
-
 }
