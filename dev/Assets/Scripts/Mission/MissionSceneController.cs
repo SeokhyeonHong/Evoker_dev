@@ -6,28 +6,18 @@ using UnityEngine.SceneManagement;
 public class MissionSceneController : MonoBehaviour
 {
     private GameObject m_PlayerObject;
-    public GameObject AskMessage;
     public string EnterSceneName;
     void Start()
     {
-        m_PlayerObject = GameObject.FindGameObjectsWithTag("Player")[0];
-        AskMessage.SetActive(false);
+        m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
     {
         float dist = Vector3.Distance(m_PlayerObject.transform.position, transform.position);
-        if(dist < 5f)
+        if(dist < 5f && Input.GetKey(KeyCode.Return))
         {
-            AskMessage.SetActive(true);
-            if(Input.GetKey(KeyCode.Return))
-            {
-                SceneManager.LoadScene(EnterSceneName);
-            }
-        }
-        else
-        {
-            AskMessage.SetActive(false);
+            SceneManager.LoadScene(EnterSceneName);
         }
     }
 }

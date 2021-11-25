@@ -59,26 +59,50 @@ public class SupervisorController : MonoBehaviour
         float weight = 5f;
         if(Time.time > mf_NextMoveTime)
         {
-            float dx = (2 * Random.Range(0, 2) - 1) * weight;
-            float dz = (2 * Random.Range(0, 2) - 1) * weight;
-            
-            float normalize = Mathf.Sqrt(dx * dx + dz * dz);
-            if(normalize > 0.0001f)
+            float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
+            if(distance < 15f)
             {
-                mf_Angle = Mathf.Rad2Deg * Mathf.Acos(dx / Mathf.Sqrt(dx * dx + dz * dz));
-                if(dz < 0)
+                Vector3 toPlayer = m_PlayerObject.transform.position - transform.position;
+
+                float angle = Vector3.Angle(transform.forward, toPlayer);
+                Vector3 cross = Vector3.Cross(transform.forward, toPlayer);
+                float dot = Vector3.Dot(transform.up, cross);
+                if(dot < 0)
                 {
-                    mf_Angle = 360 - mf_Angle;
+                    mf_Angle -= angle;
                 }
-                mf_Angle = 90 - mf_Angle;
+                else
+                {
+                    mf_Angle += angle;
+                }
 
-                
-                mf_NewX = Mathf.Max(Mathf.Min(transform.position.x + dx, mf_MaxX), mf_MinX);
-                mf_NewZ = Mathf.Max(Mathf.Min(transform.position.z + dz, mf_MaxZ), mf_MinZ);
+                mf_NewX = m_PlayerObject.transform.position.x;
+                mf_NewZ = m_PlayerObject.transform.position.z;
                 m_NewQuat = Quaternion.AngleAxis(mf_Angle, Vector3.up);
-
-                mf_NextMoveTime += 1.5f;
             }
+            else
+            {
+                float dx = (2 * Random.Range(0, 2) - 1) * weight;
+                float dz = (2 * Random.Range(0, 2) - 1) * weight;
+                
+                float normalize = Mathf.Sqrt(dx * dx + dz * dz);
+                if(normalize > 0.0001f)
+                {
+                    mf_Angle = Mathf.Rad2Deg * Mathf.Acos(dx / Mathf.Sqrt(dx * dx + dz * dz));
+                    if(dz < 0)
+                    {
+                        mf_Angle = 360 - mf_Angle;
+                    }
+                    mf_Angle = 90 - mf_Angle;
+
+                    
+                    mf_NewX = Mathf.Max(Mathf.Min(transform.position.x + dx, mf_MaxX), mf_MinX);
+                    mf_NewZ = Mathf.Max(Mathf.Min(transform.position.z + dz, mf_MaxZ), mf_MinZ);
+                    m_NewQuat = Quaternion.AngleAxis(mf_Angle, Vector3.up);
+
+                }
+            }
+            mf_NextMoveTime += 0.5f;
         }
         
         Vector3 target = new Vector3(mf_NewX, 0, mf_NewZ);

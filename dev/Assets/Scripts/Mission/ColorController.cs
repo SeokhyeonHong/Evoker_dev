@@ -48,8 +48,8 @@ public class ColorController : MonoBehaviour
         }
     }
 
-    public void Success()
+    public void SetColor(int success)
     {
-        mi_Success = 1;
+        mi_Success = success;
     }
 }
