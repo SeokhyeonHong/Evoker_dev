@@ -11,9 +11,20 @@ public class CharacterController : MonoBehaviour
     private float mf_Smooth = 5f;
     private float mf_Move = 1f;
     private bool mb_MoveLeft, mb_MoveRight, mb_MoveForward, mb_MoveBackward;
-    private bool mb_Run;
+    private bool mb_Run, mb_Movable = true;
 
-    public int[] mi_Gauges = new int[5];
+    private int[] mi_Gauges = new int[5];
+
+    void Awake()
+    {
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
+        if(objs.Length > 1)
+        {
+            Destroy(this.gameObject);
+        }
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     void Start()
     {
         m_Animator = GetComponent<Animator>();
@@ -27,7 +38,10 @@ public class CharacterController : MonoBehaviour
 
     void Update()
     {
-        Move();
+        if(mb_Movable)
+        {
+            Move();
+        }
         AnimationUpdate();
         CameraUpdate();
     }
@@ -97,6 +111,13 @@ public class CharacterController : MonoBehaviour
 
     void AnimationUpdate()
     {
+        if(!mb_Movable)
+        {
+            m_Animator.SetBool("bRunning", false);
+            m_Animator.SetBool("bMoving", false);
+            return;
+        }
+
         if(mb_MoveForward || mb_MoveBackward || mb_MoveLeft || mb_MoveRight)
         {
             m_Animator.SetBool("bMoving", true);
@@ -120,6 +141,7 @@ public class CharacterController : MonoBehaviour
     void CameraUpdate()
     {
         m_Camera.transform.position = transform.position + m_CameraTrans;
+        m_Camera.transform.rotation = Quaternion.AngleAxis(10f, Vector3.right);
     }
 
     public int GetEmotionGauge(int idx)
@@ -130,9 +152,14 @@ public class CharacterController : MonoBehaviour
     public void DecreaseGauge(int idx, int decrease)
     {
         mi_Gauges[idx] -= decrease;
-        if(mi_Gauges[idx] == 0)
+        if(mi_Gauges[idx] <= 0)
         {
-            // SceneManager.LoadScene("")
+            SceneManager.LoadScene("NO!!!");
         }
+    }
+
+    public void SetMovable(bool movable)
+    {
+        mb_Movable = movable;
     }
 }

@@ -7,21 +7,24 @@ public class SupervisorController : MonoBehaviour
 {
     public GameObject moveRangeObject;
     private Animator m_Animator;
-    private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
-    private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
     private Quaternion m_NewQuat;
     private GameObject m_PlayerObject;
+    private PyServer m_Server;
+    private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
+    private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
+    private List<float> m_ScoreList = new List<float>();
     private float mf_NextMoveTime = 0f, mf_MissionTimeElapsed = 0f;
-    public int mi_MissionEmotion = 0;
-    public float mf_Score = 0f;
     private bool mb_MissionFinished = false;
+    private int[] mi_EmotionToIdx = {2, 3, 4, 0, 1};
+    public int MissionEmotion = 0;
 
     void Start()
     {
         SetRange(moveRangeObject);
 
         m_Animator = GetComponent<Animator>();
-        m_PlayerObject = GameObject.Find("PlayerObject");
+        m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
+        m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
         mf_Speed = 1.0f;
     }
 
@@ -87,21 +90,48 @@ public class SupervisorController : MonoBehaviour
     void ThrowMission()
     {
         m_Animator.SetBool("bMoving", false);
-        if(mf_MissionTimeElapsed < 5.0f)
+        if(mf_MissionTimeElapsed < 5f)
         {
+            m_PlayerObject.GetComponent<CharacterController>().SetMovable(false);
             mf_MissionTimeElapsed += Time.deltaTime;
-            if(mf_Score > 0.5f)
+            
+            float score = m_Server.GetScore(MissionEmotion);
+            if(mf_MissionTimeElapsed < 1f)
             {
-                m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_MissionEmotion, 1);
-                mb_MissionFinished = true;
-                mf_MissionTimeElapsed = 0f;
+                m_ScoreList.Add(score);
+            }
+            else
+            {
+                m_ScoreList.Add(score);
+                m_ScoreList.RemoveAt(0);
+
+                float avg_score = GetAverageScore();
+                if(avg_score > 0.5f)
+                {
+                    m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
+                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotion], 1);
+                    mb_MissionFinished = true;
+                    mf_MissionTimeElapsed = 0f;
+                }
             }
         }
         else
         {
-            m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_MissionEmotion, 2);
+            m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
+            m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotion], 2);
             mb_MissionFinished = true;
             mf_MissionTimeElapsed = 0f;
         }
+    }
+
+    float GetAverageScore()
+    {
+        float ret = 0f;
+        for(int i = 0; i < m_ScoreList.Count; ++i)
+        {
+            ret += m_ScoreList[i];
+        }
+        ret /= m_ScoreList.Count;
+        return ret;
     }
 }

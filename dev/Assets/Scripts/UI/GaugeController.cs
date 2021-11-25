@@ -15,14 +15,10 @@ public class GaugeController : MonoBehaviour
 
     void Update()
     {
-        try
+        int gauge = m_PlayerObject.GetComponent<CharacterController>().GetEmotionGauge(EmotionNum);
+        if(gauge >= 1)
         {
-            int gauge = m_PlayerObject.GetComponent<CharacterController>().GetEmotionGauge(EmotionNum);
             gameObject.GetComponent<Image>().sprite = GaugeImages[gauge - 1];
-        }
-        catch(Exception e)
-        {
-            Debug.Log("GaugeController: " + e.ToString());
         }
     }
 }
