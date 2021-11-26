@@ -8,7 +8,7 @@ public class SupervisorController : MonoBehaviour
     public GameObject moveRangeObject;
     private Animator m_Animator;
     private Quaternion m_NewQuat;
-    private GameObject m_PlayerObject;
+    private GameObject m_PlayerObject, m_ExclaimationObject;
     private PyServer m_Server;
     private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
     private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
@@ -25,6 +25,7 @@ public class SupervisorController : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
+        m_ExclaimationObject = transform.Find("Exclaimation").gameObject;
         mf_Speed = 1.0f;
     }
 
@@ -35,6 +36,7 @@ public class SupervisorController : MonoBehaviour
         {
             Move();
             mb_MissionFinished = false;
+            mf_MissionTimeElapsed = 0f;
         }
         else if(!mb_MissionFinished)
         {
@@ -62,6 +64,8 @@ public class SupervisorController : MonoBehaviour
             float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
             if(distance < 15f)
             {
+                m_ExclaimationObject.SetActive(true);
+
                 Vector3 toPlayer = m_PlayerObject.transform.position - transform.position;
 
                 float angle = Vector3.Angle(transform.forward, toPlayer);
@@ -82,6 +86,8 @@ public class SupervisorController : MonoBehaviour
             }
             else
             {
+                m_ExclaimationObject.SetActive(false);
+                
                 float dx = (2 * Random.Range(0, 2) - 1) * weight;
                 float dz = (2 * Random.Range(0, 2) - 1) * weight;
                 

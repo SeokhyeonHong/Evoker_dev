@@ -6,6 +6,18 @@ public class MissionController : MonoBehaviour
 {
     private List<bool> m_MissionSuccess = new List<bool>();
     private List<GameObject> m_MissionObjects = new List<GameObject>();
+    private bool mb_ClosePlayer;
+    public bool ClosePlayer
+    {
+        get { return mb_ClosePlayer; }
+        set { mb_ClosePlayer = value; }
+    }
+    private bool mb_InMission;
+    public bool InMission
+    {
+        get { return mb_InMission; }
+        set { mb_InMission = value; }
+    }
 
     void Awake()
     {

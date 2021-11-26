@@ -6,18 +6,29 @@ using UnityEngine.SceneManagement;
 public class MissionSceneController : MonoBehaviour
 {
     private GameObject m_PlayerObject;
+    private MissionController m_MC;
     public string EnterSceneName;
     void Start()
     {
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
+        m_MC = transform.parent.gameObject.GetComponent<MissionController>();
     }
 
     void Update()
     {
         float dist = Vector3.Distance(m_PlayerObject.transform.position, transform.position);
-        if(dist < 5f && Input.GetKey(KeyCode.Return))
+        if(dist < 5f)
         {
-            SceneManager.LoadScene(EnterSceneName);
+            m_MC.ClosePlayer = true;
+            if(Input.GetKey(KeyCode.Return))
+            {
+                m_MC.InMission = true;
+                SceneManager.LoadScene(EnterSceneName);
+            }
+        }
+        else
+        {
+            m_MC.ClosePlayer = false;
         }
     }
 }
