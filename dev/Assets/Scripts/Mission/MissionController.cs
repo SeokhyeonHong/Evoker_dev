@@ -6,12 +6,13 @@ public class MissionController : MonoBehaviour
 {
     private List<bool> m_MissionSuccess = new List<bool>();
     private List<GameObject> m_MissionObjects = new List<GameObject>();
-    private bool mb_ClosePlayer;
-    public bool ClosePlayer
+    private Vector3 m_EntryPosition;
+    public Vector3 EntryPosition
     {
-        get { return mb_ClosePlayer; }
-        set { mb_ClosePlayer = value; }
+        get { return m_EntryPosition; }
+        set { m_EntryPosition = value; }
     }
+    private bool[] mb_IsClose;
     private bool mb_InMission;
     public bool InMission
     {
@@ -31,11 +32,12 @@ public class MissionController : MonoBehaviour
 
     void Start()
     {
-        for(int i = 0; i < transform.childCount; ++i)
+        for(int i = 1; i < transform.childCount; ++i)
         {
             m_MissionObjects.Add(transform.GetChild(i).gameObject);
             m_MissionSuccess.Add(false);
         }
+        mb_IsClose = new bool[transform.childCount - 1];
     }
 
     void Update()
@@ -50,5 +52,22 @@ public class MissionController : MonoBehaviour
     public bool GetMissionSuccess(int idx)
     {
         return m_MissionSuccess[idx];
+    }
+
+    public void SetClose(int idx, bool val)
+    {
+        mb_IsClose[idx] = val;
+    }
+
+    public bool GetClose()
+    {
+        for(int i = 0; i < mb_IsClose.Length; ++i)
+        {
+            if(mb_IsClose[i])
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

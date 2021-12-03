@@ -8,7 +8,7 @@ public class SupervisorController : MonoBehaviour
     public GameObject moveRangeObject;
     private Animator m_Animator;
     private Quaternion m_NewQuat;
-    private GameObject m_PlayerObject, m_ExclaimationObject;
+    private GameObject m_PlayerObject, m_ExclaimationObject, m_MissionTextObject;
     private PyServer m_Server;
     private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
     private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
@@ -16,15 +16,18 @@ public class SupervisorController : MonoBehaviour
     private float mf_NextMoveTime = 0f, mf_MissionTimeElapsed = 0f;
     private bool mb_MissionFinished = false;
     private int[] mi_EmotionToIdx = {2, 3, 4, 0, 1};
-    public int MissionEmotion = 0;
+    private float[] mf_Threshold = { 0.6f, 0.3f, 0.3f, 0.5f, 0.6f };
+    private string[] m_EmotionNames = { "ANGRY", "DISGUST", "FEAR", "HAPPY", "SAD", "SUPRISED", "NEUTRAL" };
+    public int MissionEmotionNum = 0;
 
     void Start()
     {
         SetRange(moveRangeObject);
 
         m_Animator = GetComponent<Animator>();
-        m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
+        m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
+        m_MissionTextObject = GameObject.Find("Canvas/MissionText");
         m_ExclaimationObject = transform.Find("Exclaimation").gameObject;
         mf_Speed = 1.0f;
     }
@@ -32,15 +35,21 @@ public class SupervisorController : MonoBehaviour
     void Update()
     {
         float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
-        if(distance > 5.0f)
+        
+        if(!mb_MissionFinished && distance < 5.0f)
         {
-            Move();
-            mb_MissionFinished = false;
-            mf_MissionTimeElapsed = 0f;
-        }
-        else if(!mb_MissionFinished)
-        {
+            m_MissionTextObject.SetActive(true);
             ThrowMission();
+        }
+        else
+        {
+            m_MissionTextObject.SetActive(false);
+            if(distance > 5.0f)
+            {
+                Move();
+                mb_MissionFinished = false;
+                mf_MissionTimeElapsed = 0f;
+            }
         }
     }
 
@@ -58,6 +67,8 @@ public class SupervisorController : MonoBehaviour
 
     void Move()
     {
+        m_Animator.SetBool("bMoving", true);
+
         float weight = 5f;
         if(Time.time > mf_NextMoveTime)
         {
@@ -114,18 +125,18 @@ public class SupervisorController : MonoBehaviour
         Vector3 target = new Vector3(mf_NewX, 0, mf_NewZ);
         transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * mf_Speed);
         transform.rotation = Quaternion.Slerp(transform.rotation, m_NewQuat, Time.deltaTime * Mathf.Abs(mf_Angle) * 0.05f);
-        m_Animator.SetBool("bMoving", true);
     }
 
     void ThrowMission()
     {
+        m_MissionTextObject.GetComponent<Text>().text = "Make " + m_EmotionNames[MissionEmotionNum] + " Expression!";
         m_Animator.SetBool("bMoving", false);
         if(mf_MissionTimeElapsed < 5f)
         {
             m_PlayerObject.GetComponent<CharacterController>().SetMovable(false);
             mf_MissionTimeElapsed += Time.deltaTime;
             
-            float score = m_Server.GetScore(MissionEmotion);
+            float score = m_Server.GetScore(MissionEmotionNum);
             if(mf_MissionTimeElapsed < 1f)
             {
                 m_ScoreList.Add(score);
@@ -139,7 +150,7 @@ public class SupervisorController : MonoBehaviour
                 if(avg_score > 0.5f)
                 {
                     m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
-                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotion], 1);
+                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 1);
                     mb_MissionFinished = true;
                     mf_MissionTimeElapsed = 0f;
                 }
@@ -148,7 +159,7 @@ public class SupervisorController : MonoBehaviour
         else
         {
             m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
-            m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotion], 2);
+            m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 2);
             mb_MissionFinished = true;
             mf_MissionTimeElapsed = 0f;
         }

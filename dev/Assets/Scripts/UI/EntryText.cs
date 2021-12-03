@@ -16,7 +16,8 @@ public class EntryText : MonoBehaviour
     void Update()
     {
         bool inMission = m_MC.InMission;
-        bool closePlayer = m_MC.ClosePlayer;
+        bool closePlayer = m_MC.GetClose();
+        Debug.Log(inMission.ToString() + closePlayer.ToString());
         m_EntryMessage.SetActive(!inMission && closePlayer);
     }
 }
