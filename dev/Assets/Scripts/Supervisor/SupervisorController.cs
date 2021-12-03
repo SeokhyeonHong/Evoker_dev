@@ -16,7 +16,6 @@ public class SupervisorController : MonoBehaviour
     private float mf_NextMoveTime = 0f, mf_MissionTimeElapsed = 0f;
     private bool mb_MissionFinished = false;
     private int[] mi_EmotionToIdx = {2, 3, 4, 0, 1};
-    private float[] mf_Threshold = { 0.6f, 0.3f, 0.3f, 0.5f, 0.6f };
     private string[] m_EmotionNames = { "ANGRY", "DISGUST", "FEAR", "HAPPY", "SAD", "SUPRISED", "NEUTRAL" };
     public int MissionEmotionNum = 0;
 
@@ -129,7 +128,7 @@ public class SupervisorController : MonoBehaviour
 
     void ThrowMission()
     {
-        m_MissionTextObject.GetComponent<Text>().text = "Make " + m_EmotionNames[MissionEmotionNum] + " Expression!";
+        m_MissionTextObject.GetComponent<Text>().text = "Make " + m_Server.GetName(MissionEmotionNum) + " Expression!";
         m_Animator.SetBool("bMoving", false);
         if(mf_MissionTimeElapsed < 5f)
         {
@@ -147,7 +146,7 @@ public class SupervisorController : MonoBehaviour
                 m_ScoreList.RemoveAt(0);
 
                 float avg_score = GetAverageScore();
-                if(avg_score > 0.5f)
+                if(avg_score > m_Server.GetThreshold(MissionEmotionNum))
                 {
                     m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
                     m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 1);

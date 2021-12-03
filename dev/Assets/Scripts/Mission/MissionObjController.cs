@@ -49,7 +49,6 @@ public class MissionObjController : MonoBehaviour
         mf_MissionTimeElapsed += Time.deltaTime;
         
         float score = m_Server.GetScore(MissionEmotion);
-        Debug.Log("Mission Score: " + score.ToString());
         if(mf_MissionTimeElapsed < 1f)
         {
             m_ScoreList.Add(score);
@@ -60,7 +59,7 @@ public class MissionObjController : MonoBehaviour
             m_ScoreList.RemoveAt(0);
 
             float avg_score = GetAverageScore();
-            if(avg_score > 0.3f)
+            if(avg_score > m_Server.GetThreshold(MissionEmotion))
             {
                 m_MissionObject.GetComponent<MissionController>().SetMissionSuccess(MissionNum);
                 mf_MissionTimeElapsed = 0f;

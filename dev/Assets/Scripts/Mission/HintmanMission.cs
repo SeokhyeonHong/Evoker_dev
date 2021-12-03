@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-
-// index = ANGRY, DISGUST, FEAR, HAPPY, SAD, SUPRIRSE, NEUTRAL
 
 public class HintmanMission : MonoBehaviour
 {
@@ -15,7 +12,6 @@ public class HintmanMission : MonoBehaviour
     private List<float> m_ScoreList = new List<float>();
     private float mf_MissionTimeElapsed = 0f;
     private bool mb_MissionSuccess = false;
-    private int[] mi_EmotionToIdx = {2, 3, 4, 0, 1};
     private string[] m_EmotionNames = { "ANGRY", "DISGUST", "FEAR", "HAPPY", "SAD", "SUPRISED", "NEUTRAL" };
     public int HintMissionNum = 5;
 
@@ -63,7 +59,7 @@ public class HintmanMission : MonoBehaviour
 
     void ThrowMission()
     {
-        m_MissionTextObject.GetComponent<Text>().text = "Make " + m_EmotionNames[HintMissionNum] + " Expression!";
+        m_MissionTextObject.GetComponent<Text>().text = "Make " + m_Server.GetName(HintMissionNum) + " Expression!";
         float score = m_Server.GetScore(HintMissionNum);
         if(mf_MissionTimeElapsed < 1f)
         {
@@ -75,7 +71,7 @@ public class HintmanMission : MonoBehaviour
             m_ScoreList.RemoveAt(0);
 
             float avg_score = GetAverageScore();
-            if(avg_score > 0.5f)
+            if(avg_score > m_Server.GetThreshold(HintMissionNum))
             {
                 mb_MissionSuccess = true;
                 mf_MissionTimeElapsed = 0f;

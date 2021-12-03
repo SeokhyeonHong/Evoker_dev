@@ -10,8 +10,10 @@ public class PyServer : MonoBehaviour
     private TcpListener m_Server;
     private Thread m_ServerThread;
     private TcpClient m_ConnectedClient;
-    private float[] mf_EmotionScores;
-    private string[] ms_EmotionNames;
+    private float[] mf_EmotionScores = new float[7];
+    private string[] ms_EmotionNames = {"Angry", "Disgust", "Fear", "Happy", "Sad", "Surprised", "Neutral"};
+    
+    private float[] mf_Threshold = { 0.5f, 0.1f, 0.2f, 0.6f, 0.5f, 0.5f, 0.7f };
     private bool mb_Connected = false;
     
     public enum eEmotion
@@ -29,8 +31,6 @@ public class PyServer : MonoBehaviour
     }
     public void Start()
     {
-        mf_EmotionScores = new float[7];
-        ms_EmotionNames = new string[] {"Angry", "Disgust", "Fear", "Happy", "Sad", "Surprised", "Neutral"};
         m_ServerThread = new Thread(new ThreadStart(ListenRequests));
         m_ServerThread.IsBackground = true;
         m_ServerThread.Start();
@@ -95,13 +95,13 @@ public class PyServer : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
 
     public float GetScore(int idx) => mf_EmotionScores[idx];
+    public float GetThreshold(int idx) => mf_Threshold[idx];
     public string GetName(int idx) => ms_EmotionNames[idx];
     public bool GetConnected() => mb_Connected;
 }
