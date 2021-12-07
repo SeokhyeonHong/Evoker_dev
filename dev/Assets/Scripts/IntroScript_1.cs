@@ -31,14 +31,13 @@ public class IntroScript_1 : MonoBehaviour
     {
         string message = "";
         if(m_Server.GetConnected())
-        // if(bTest)
         {
             message = "Press Start";
             m_Button.SetActive(true);
         }
         else
         {
-            message = "Loading ...";
+            message = System.IO.Directory.GetCurrentDirectory();//"Loading ...";
             m_Button.SetActive(false);
         }
 
@@ -55,7 +54,6 @@ public class IntroScript_1 : MonoBehaviour
     
     public void ChangeScene()
     {
-        // Debug.Log("Click");
         SceneManager.LoadScene("Main");
     }
 }

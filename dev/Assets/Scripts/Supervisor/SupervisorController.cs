@@ -18,6 +18,12 @@ public class SupervisorController : MonoBehaviour
     private int[] mi_EmotionToIdx = {2, 3, 4, 0, 1};
     private string[] m_EmotionNames = { "ANGRY", "DISGUST", "FEAR", "HAPPY", "SAD", "SUPRISED", "NEUTRAL" };
     public int MissionEmotionNum = 0;
+    private bool mb_ShowMessage;
+    public bool ShowMessage
+    {
+        get { return mb_ShowMessage; }
+        set { mb_ShowMessage = value; }
+    }
 
     void Start()
     {
@@ -26,7 +32,6 @@ public class SupervisorController : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
         m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
-        m_MissionTextObject = GameObject.Find("Canvas/MissionText");
         m_ExclaimationObject = transform.Find("Exclaimation").gameObject;
         mf_Speed = 1.0f;
     }
@@ -37,12 +42,12 @@ public class SupervisorController : MonoBehaviour
         
         if(!mb_MissionFinished && distance < 5.0f)
         {
-            m_MissionTextObject.SetActive(true);
             ThrowMission();
+            mb_ShowMessage = true;
         }
         else
         {
-            m_MissionTextObject.SetActive(false);
+            mb_ShowMessage = false;
             if(distance > 5.0f)
             {
                 Move();
@@ -128,7 +133,6 @@ public class SupervisorController : MonoBehaviour
 
     void ThrowMission()
     {
-        m_MissionTextObject.GetComponent<Text>().text = "Make " + m_Server.GetName(MissionEmotionNum) + " Expression!";
         m_Animator.SetBool("bMoving", false);
         if(mf_MissionTimeElapsed < 5f)
         {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class HintmanMission : MonoBehaviour
 {
     private Quaternion m_NewQuat;
-    private GameObject m_PlayerObject, m_MissionObject, m_HintObject, m_MissionTextObject;
+    private GameObject m_PlayerObject, m_MissionObject, m_HintObject;
     private PyServer m_Server;
     private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
     private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
@@ -14,6 +14,12 @@ public class HintmanMission : MonoBehaviour
     private bool mb_MissionSuccess = false;
     private string[] m_EmotionNames = { "ANGRY", "DISGUST", "FEAR", "HAPPY", "SAD", "SUPRISED", "NEUTRAL" };
     public int HintMissionNum = 5;
+    private bool mb_ShowMessage;
+    public bool ShowMessage
+    {
+        get { return mb_ShowMessage; }
+        set { mb_ShowMessage = value; }
+    }
 
 
 
@@ -22,7 +28,6 @@ public class HintmanMission : MonoBehaviour
         m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
         m_MissionObject = GameObject.FindGameObjectWithTag("Mission");
-        m_MissionTextObject = GameObject.Find("Canvas/MissionText");
         m_HintObject = transform.Find("HintObject").gameObject;
     }
 
@@ -33,12 +38,12 @@ public class HintmanMission : MonoBehaviour
         float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
         if(!mb_MissionSuccess && distance < 5f)
         {
+            mb_ShowMessage = true;
             ThrowMission();
-            m_MissionTextObject.SetActive(true);
         }
         else
         {
-            m_MissionTextObject.SetActive(false);
+            mb_ShowMessage = false;
             if(mb_MissionSuccess)
             {
                 mf_MissionTimeElapsed = 0f;
@@ -59,7 +64,6 @@ public class HintmanMission : MonoBehaviour
 
     void ThrowMission()
     {
-        m_MissionTextObject.GetComponent<Text>().text = "Make " + m_Server.GetName(HintMissionNum) + " Expression!";
         float score = m_Server.GetScore(HintMissionNum);
         if(mf_MissionTimeElapsed < 1f)
         {

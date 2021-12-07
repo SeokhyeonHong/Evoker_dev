@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HintmanController : MonoBehaviour
 {
+    
     private GameObject m_MissionObject;
     private List<GameObject> m_HintmanObjectList = new List<GameObject>();
     void Start()
