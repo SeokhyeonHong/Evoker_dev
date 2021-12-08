@@ -6966,7 +6966,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.5918476, g: 0.7522754, b: 0.9433962, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -7706,7 +7706,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaultAnimationName: bSitting
   MissionEmotion: 4
-  MissionNum: 1
+  MissionNum: 2
   ExitButton: {fileID: 2013099288}
 --- !u!4 &1594685628
 Transform:

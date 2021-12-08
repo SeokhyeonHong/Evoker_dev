@@ -12,12 +12,18 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: c1d4360e1cad55b4f9b41bca4a345cae
   - enabled: 1
-    path: Assets/Scenes/MissionScene_0.unity
-    guid: a178873fb2490214b9c7727b768ba8d1
+    path: Assets/Scenes/MissionScene_Surprise_Pub.unity
+    guid: 06c5e6872434ffb47b5a3e2e1dbc4a2f
   - enabled: 1
-    path: Assets/Scenes/MissionScene_1.unity
-    guid: 5d62438a535860f43a14873560b4cd33
+    path: Assets/Scenes/MissionScene_Angry_Shop.unity
+    guid: 21dcff4c847a5ac49882caa4e3e16ef9
   - enabled: 1
-    path: Assets/Scenes/Intro_2.unity
-    guid: d666dffc980949a42bb87b498cd6986d
+    path: Assets/Scenes/MissionScene_Disgust_Toilet.unity
+    guid: 4a7fcb940f91c2143b54ddee590f290f
+  - enabled: 1
+    path: Assets/Scenes/MissionScene_Happy_Home.unity
+    guid: 283ce40c83c77664ba2b37243444dacc
+  - enabled: 1
+    path: Assets/Scenes/MissionScene_Sad_Hospital.unity
+    guid: eb3ffc5547972824ca4978ca0616cb33
   m_configObjects: {}

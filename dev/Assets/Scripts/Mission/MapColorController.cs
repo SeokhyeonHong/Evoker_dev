@@ -11,7 +11,11 @@ public class MapColorController : MonoBehaviour
         m_MissionObject = GameObject.FindGameObjectWithTag("Mission");
         for(int i = 0; i < transform.childCount; ++i)
         {
-            m_MapObjects.Add(transform.GetChild(i).gameObject.GetComponent<ColorController>());
+            ColorController cc = transform.GetChild(i).gameObject.GetComponent<ColorController>();
+            if(cc != null)
+            {
+                m_MapObjects.Add(cc);
+            }
         }
     }
 

@@ -34,7 +34,6 @@ public class HintmanMission : MonoBehaviour
     void Update()
     {
         m_HintObject.SetActive(mb_MissionSuccess);
-
         float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
         if(!mb_MissionSuccess && distance < 5f)
         {
@@ -48,7 +47,7 @@ public class HintmanMission : MonoBehaviour
             {
                 mf_MissionTimeElapsed = 0f;
                 Vector3 target = m_PlayerObject.transform.position;
-                target.y += 3;
+                target.y = m_HintObject.transform.position.y;
                 if(distance < 5f)
                 {
                     m_HintObject.transform.position = Vector3.MoveTowards(m_HintObject.transform.position, target, Time.deltaTime * 3f);

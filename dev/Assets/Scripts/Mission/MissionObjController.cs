@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class MissionObjController : MonoBehaviour
 {
-    public string DefaultAnimationName;
     public int MissionEmotion, MissionNum;
     public GameObject ExitButton;
-    private Animator m_Animator;
     private GameObject m_NPCObject, m_PlayerObject, m_MissionObject;
     private PyServer m_Server;
     private List<float> m_ScoreList = new List<float>();
@@ -17,8 +15,6 @@ public class MissionObjController : MonoBehaviour
     void Start()
     {
         m_NPCObject = transform.Find("NPC").gameObject;
-        m_Animator = m_NPCObject.GetComponent<Animator>();
-        m_Animator.SetBool(DefaultAnimationName, true);
 
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
         m_MissionObject = GameObject.FindGameObjectWithTag("Mission");

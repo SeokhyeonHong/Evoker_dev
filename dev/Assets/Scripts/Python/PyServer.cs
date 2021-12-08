@@ -13,7 +13,7 @@ public class PyServer : MonoBehaviour
     private float[] mf_EmotionScores = new float[7];
     private string[] ms_EmotionNames = {"Angry", "Disgust", "Fear", "Happy", "Sad", "Surprised", "Neutral"};
     
-    private float[] mf_Threshold = { 0.5f, 0.1f, 0.2f, 0.6f, 0.5f, 0.5f, 0.7f };
+    private float[] mf_Threshold = { 0.5f, 0.05f, 0.2f, 0.6f, 0.5f, 0.5f, 0.7f };
     private bool mb_Connected = false;
     
     public enum eEmotion

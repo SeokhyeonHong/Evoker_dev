@@ -37,7 +37,7 @@ public class IntroScript_1 : MonoBehaviour
         }
         else
         {
-            message = System.IO.Directory.GetCurrentDirectory();//"Loading ...";
+            message = "Loading ...";
             m_Button.SetActive(false);
         }
 
