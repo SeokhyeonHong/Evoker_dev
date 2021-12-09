@@ -51,9 +51,4 @@ public class IntroScript_1 : MonoBehaviour
     {
         mEmotionNum = emotionNum;        
     }
-    
-    public void ChangeScene()
-    {
-        SceneManager.LoadScene("Main");
-    }
 }
