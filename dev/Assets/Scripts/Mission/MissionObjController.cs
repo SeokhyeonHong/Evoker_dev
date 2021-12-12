@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MissionObjController : MonoBehaviour
 {
     public int MissionEmotion, MissionNum;
-    public GameObject ExitButton;
+    public GameObject TextObject;
+    private Text m_Text;
     private GameObject m_NPCObject, m_PlayerObject, m_MissionObject;
     private PyServer m_Server;
+    private SpeechController m_SC;
     private List<float> m_ScoreList = new List<float>();
     private float mf_MissionTimeElapsed = 0f;
-    private bool mb_Success = false;
 
     void Start()
     {
@@ -20,28 +23,56 @@ public class MissionObjController : MonoBehaviour
         m_MissionObject = GameObject.FindGameObjectWithTag("Mission");
         m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
 
-        ExitButton.SetActive(false);
+        m_Text = TextObject.GetComponent<Text>();
+        m_SC = this.GetComponent<SpeechController>();
     }
 
     void Update()
     {
-        mb_Success = m_MissionObject.GetComponent<MissionController>().GetMissionSuccess(MissionNum);
+        bool success = m_MissionObject.GetComponent<MissionController>().GetMissionSuccess(MissionNum);
         float dist = Vector3.Distance(m_NPCObject.transform.position, m_PlayerObject.transform.position);
 
-        if(!mb_Success && dist < 5f)
+        if(!success)
         {
-            ThrowMission();
+            m_Text.text = "";
+            if(dist < 5f)
+            {
+                if(m_SC.SpeechFinished)
+                {
+                    m_SC.SetSpeechActive(false);
+                    ThrowMission();
+                }
+                else
+                {
+                    m_SC.SetSpeechActive(true);
+                    m_SC.ShowSpeech();
+                }
+            }
+            else
+            {
+                m_SC.SetSpeechActive(false);
+                m_SC.SpeechNum = 0;
+            }
+        }
+        else
+        {
+            m_Text.text = "Mission Success!\nPress Enter to Exit!";
+            m_SC.SetSpeechActive(false);
+            if(Input.GetKeyDown(KeyCode.Return))
+            {
+                m_MissionObject.GetComponent<MissionController>().InMission = false;
+                m_PlayerObject.transform.position = m_MissionObject.GetComponent<MissionController>().EntryPosition;
+                SceneManager.LoadScene("Main");
+            }
         }
 
-        
-        ExitButton.SetActive(mb_Success);
-
-        int color = mb_Success ? 1 : 0;
+        int color = success ? 1 : 0;
         this.GetComponent<ColorController>().SetColor(color);
     }
 
     void ThrowMission()
     {
+        m_Text.text = "Make Facial Expressions!";
         mf_MissionTimeElapsed += Time.deltaTime;
         
         float score = m_Server.GetScore(MissionEmotion);

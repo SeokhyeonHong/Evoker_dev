@@ -53,11 +53,11 @@ public class CharacterController : MonoBehaviour
         
         Quaternion qTarget = transform.rotation;
 
-        mb_MoveForward = Input.GetKey(KeyCode.W);
-        mb_MoveBackward = Input.GetKey(KeyCode.S);
-        mb_MoveLeft = Input.GetKey(KeyCode.A);
-        mb_MoveRight = Input.GetKey(KeyCode.D);
-        mb_Run = Input.GetKey(KeyCode.Space);
+        mb_MoveForward = Input.GetKey(KeyCode.UpArrow);
+        mb_MoveBackward = Input.GetKey(KeyCode.DownArrow);
+        mb_MoveLeft = Input.GetKey(KeyCode.LeftArrow);
+        mb_MoveRight = Input.GetKey(KeyCode.RightArrow);
+        mb_Run = Input.GetKey(KeyCode.LeftShift);
 
         if(mb_Run)
         {
@@ -68,39 +68,47 @@ public class CharacterController : MonoBehaviour
             mf_Move = 1f;
         }
 
-        if(mb_MoveForward && mb_MoveLeft) {
+        if(mb_MoveForward && mb_MoveLeft)
+        {
             vTarget.x -= mf_Move / Mathf.Sqrt(2);
             vTarget.z += mf_Move / Mathf.Sqrt(2);
             qTarget = Quaternion.Euler(0, 315, 0);
         }
-        else if(mb_MoveForward && mb_MoveRight) {
+        else if(mb_MoveForward && mb_MoveRight)
+        {
             vTarget.x += mf_Move / Mathf.Sqrt(2);
             vTarget.z += mf_Move / Mathf.Sqrt(2);
             qTarget = Quaternion.Euler(0, 45, 0);
         }
-        else if(mb_MoveBackward && mb_MoveLeft) {
+        else if(mb_MoveBackward && mb_MoveLeft)
+        {
             vTarget.x -= mf_Move / Mathf.Sqrt(2);
             vTarget.z -= mf_Move / Mathf.Sqrt(2);
             qTarget = Quaternion.Euler(0, 225, 0);
         }
-        else if(mb_MoveBackward && mb_MoveRight) {
+        else if(mb_MoveBackward && mb_MoveRight)
+        {
             vTarget.x += mf_Move / Mathf.Sqrt(2);
             vTarget.z -= mf_Move / Mathf.Sqrt(2);
             qTarget = Quaternion.Euler(0, 135, 0);
         }
-        else if(mb_MoveForward) {
+        else if(mb_MoveForward)
+        {
             vTarget.z += mf_Move;
             qTarget = Quaternion.Euler(0, 0, 0);
         }
-        else if(mb_MoveBackward) {
+        else if(mb_MoveBackward)
+        {
             vTarget.z -= mf_Move;
             qTarget = Quaternion.Euler(0, 180, 0);
         }
-        else if(mb_MoveLeft) {
+        else if(mb_MoveLeft)
+        {
             vTarget.x -= mf_Move;
             qTarget = Quaternion.Euler(0, 270, 0);
         }
-        else if(mb_MoveRight) {
+        else if(mb_MoveRight)
+        {
             vTarget.x += mf_Move;
             qTarget = Quaternion.Euler(0, 90, 0);
         }
