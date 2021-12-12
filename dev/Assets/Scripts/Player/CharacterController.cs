@@ -8,11 +8,11 @@ public class CharacterController : MonoBehaviour
     Camera m_Camera;
     private Vector3 m_CameraTrans = new Vector3(0, 6, -10);
     Animator m_Animator;
+    private GameObject m_SupervisorGroup;
     private float mf_Smooth = 5f;
     private float mf_Move = 1f;
     private bool mb_MoveLeft, mb_MoveRight, mb_MoveForward, mb_MoveBackward;
     private bool mb_Run, mb_Movable = true;
-
     private int[] mi_Gauges = new int[5];
 
     void Awake()
@@ -44,6 +44,21 @@ public class CharacterController : MonoBehaviour
         }
         AnimationUpdate();
         CameraUpdate();
+        
+        m_SupervisorGroup = GameObject.Find("Supervisors");
+        if(m_SupervisorGroup != null)
+        {
+            bool movable = true;
+            for(int i = 0; i < m_SupervisorGroup.transform.childCount; ++i)
+            {
+                bool movable_from_supervisor = m_SupervisorGroup.transform.GetChild(i).GetComponent<SupervisorController>().Movable;
+                if(!movable_from_supervisor)
+                {
+                    movable = false;
+                }
+            }
+            mb_Movable = movable;
+        }
     }
 
     void Move()
@@ -164,10 +179,5 @@ public class CharacterController : MonoBehaviour
         {
             SceneManager.LoadScene("NO!!!");
         }
-    }
-
-    public void SetMovable(bool movable)
-    {
-        mb_Movable = movable;
     }
 }

@@ -128,8 +128,8 @@ public class PyServer : MonoBehaviour
         else
         {
             float dequeue_val = m_ScoreQueue.Dequeue();
-            mf_ScoreSum += (score - dequeue_val);
             m_ScoreQueue.Enqueue(score);
+            mf_ScoreSum += (score - dequeue_val);
 
             float avg_score = mf_ScoreSum / m_ScoreQueue.Count;
             Debug.Log("score: " + score.ToString());
@@ -140,6 +140,7 @@ public class PyServer : MonoBehaviour
 
     public void ClearMissionSettings()
     {
+        mf_ScoreSum = 0f;
         mf_MissionTimeElapsed = 0f;
         mb_MissionSuccess = false;
         m_ScoreQueue.Clear();

@@ -12,9 +12,10 @@ public class SpeechController : MonoBehaviour
     {
         set { m_ImgNum = value; }
     }
-    public bool SpeechFinished
+    private bool mb_InMission;
+    public bool InMission
     {
-        get { return m_ImgNum < SpeechImgs.Count - 1 ? false : true; }
+        get { return mb_InMission; }
     }
     void Start()
     {
@@ -22,18 +23,28 @@ public class SpeechController : MonoBehaviour
 
     void Update()
     {
+        mb_InMission = m_ImgNum == SpeechImgs.Count - 2 ? true : false; 
     }
     public void ShowSpeech()
     {
         ImageObject.GetComponent<Image>().sprite = SpeechImgs[m_ImgNum];
-        if(Input.GetKeyDown(KeyCode.Return) && m_ImgNum < SpeechImgs.Count - 1)
+        if(Input.GetKeyDown(KeyCode.Return) && !mb_InMission)
         {
             m_ImgNum++;
+            if(m_ImgNum >= SpeechImgs.Count)
+            {
+                m_ImgNum = SpeechImgs.Count - 1;
+            }
         }
     }
 
     public void SetSpeechActive(bool val)
     {
         ImageObject.SetActive(val);
+    }
+
+    public void IncreaseSpeechNum()
+    {
+        m_ImgNum++;
     }
 }

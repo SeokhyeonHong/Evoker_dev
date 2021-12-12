@@ -10,10 +10,15 @@ public class SupervisorController : MonoBehaviour
     private Quaternion m_NewQuat;
     private GameObject m_PlayerObject, m_ExclaimationObject, m_MissionTextObject;
     private PyServer m_Server;
+    private SpeechController m_SC;
     private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
     private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
     private float mf_NextMoveTime = 0f, mf_MissionTimeElapsed = 0f;
-    private bool mb_MissionFinished = false;
+    private bool mb_MissionFinished = false, mb_PlayerMovable;
+    public bool Movable
+    {
+        get { return mb_PlayerMovable; }
+    }
     private int[] mi_EmotionToIdx = {2, 3, 4, 0, 1};
     public int MissionEmotionNum = 0;
 
@@ -25,41 +30,55 @@ public class SupervisorController : MonoBehaviour
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
         m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
         m_ExclaimationObject = transform.Find("Exclaimation").gameObject;
+        m_SC = this.GetComponent<SpeechController>();
         mf_Speed = 1.0f;
     }
 
     void Update()
     {
         float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
-        
-        if(!mb_MissionFinished && distance < 5.0f)
+        bool caught = !mb_MissionFinished && distance < 5f;
+        mb_PlayerMovable = !caught;
+        if(caught)
         {
             m_Animator.SetBool("bMoving", false);
-            if(m_Server.MissionTimeElapsed < 5f)
+            m_SC.SetSpeechActive(true);
+            m_SC.ShowSpeech();
+            if(m_SC.InMission)
             {
-                m_PlayerObject.GetComponent<CharacterController>().SetMovable(false);
-                m_Server.ThrowMission(MissionEmotionNum);
-                if(m_Server.MissionSuccess)
+                if(m_Server.MissionTimeElapsed < 5f)
                 {
-                    m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
-                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 1);
+                    m_Server.ThrowMission(MissionEmotionNum);
+                    if(m_Server.MissionSuccess)
+                    {
+                        m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 1);
+                        mb_MissionFinished = true;
+                        m_Server.ClearMissionSettings();
+                        m_SC.IncreaseSpeechNum();
+                    }
+                }
+                else
+                {
+                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 2);
                     mb_MissionFinished = true;
                     m_Server.ClearMissionSettings();
+                    m_SC.IncreaseSpeechNum();
                 }
-            }
-            else
-            {
-                m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
-                m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 2);
-                mb_MissionFinished = true;
-                m_Server.ClearMissionSettings();
             }
         }
         else if(distance > 5.0f)
         {
             Move();
+            m_SC.SetSpeechActive(false);
             mb_MissionFinished = false;
             mf_MissionTimeElapsed = 0f;
+            m_SC.SpeechNum = 0;
+        }
+
+        if(mb_MissionFinished)
+        {
+            m_SC.SetSpeechActive(true);
+            m_SC.ShowSpeech();
         }
     }
 
