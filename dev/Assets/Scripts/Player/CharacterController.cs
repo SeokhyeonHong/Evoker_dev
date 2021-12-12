@@ -177,7 +177,7 @@ public class CharacterController : MonoBehaviour
         mi_Gauges[idx] -= decrease;
         if(mi_Gauges[idx] <= 0)
         {
-            SceneManager.LoadScene("NO!!!");
+            SceneManager.LoadScene("Outro_2");
         }
     }
 }

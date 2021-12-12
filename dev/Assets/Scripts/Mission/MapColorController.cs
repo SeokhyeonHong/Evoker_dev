@@ -9,7 +9,7 @@ public class MapColorController : MonoBehaviour
     void Start()
     {
         m_MissionObject = GameObject.FindGameObjectWithTag("Mission");
-        for(int i = 0; i < transform.childCount; ++i)
+        for(int i = 0; i < transform.childCount - 1; ++i)
         {
             ColorController cc = transform.GetChild(i).gameObject.GetComponent<ColorController>();
             if(cc != null)

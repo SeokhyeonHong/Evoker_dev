@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MissionScene_Sad_Hospital.unity
     guid: eb3ffc5547972824ca4978ca0616cb33
+  - enabled: 1
+    path: Assets/Scenes/Outro_1.unity
+    guid: 4ffb390ed57b6a84ea39663325767928
   m_configObjects: {}

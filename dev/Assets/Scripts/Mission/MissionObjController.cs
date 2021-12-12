@@ -54,17 +54,18 @@ public class MissionObjController : MonoBehaviour
         }
         else
         {
-            m_Text.text = "Mission Success!\nPress Enter to Exit!";
+            m_Text.text = "Mission Success!";
             m_SC.SetSpeechActive(false);
-            if(Input.GetKeyDown(KeyCode.Return))
-            {
-                m_MissionObject.GetComponent<MissionController>().InMission = false;
-                m_PlayerObject.transform.position = m_MissionObject.GetComponent<MissionController>().EntryPosition;
-                SceneManager.LoadScene("Main");
-            }
         }
 
         int color = success ? 1 : 0;
         this.GetComponent<ColorController>().SetColor(color);
+    }
+
+    public void Exit()
+    {
+        m_MissionObject.GetComponent<MissionController>().InMission = false;
+        m_PlayerObject.transform.position = m_MissionObject.GetComponent<MissionController>().EntryPosition;
+        SceneManager.LoadScene("Main");
     }
 }

@@ -31,6 +31,7 @@ public class MissionController : MonoBehaviour
 
     void Start()
     {
+        // except the canvas and monopoly company
         for(int i = 1; i < transform.childCount; ++i)
         {
             m_MissionObjects.Add(transform.GetChild(i).gameObject);
@@ -51,6 +52,18 @@ public class MissionController : MonoBehaviour
     public bool GetMissionSuccess(int idx)
     {
         return m_MissionSuccess[idx];
+    }
+
+    public bool GetAllMissionSuccess()
+    {
+        for(int i = 0; i < m_MissionSuccess.Count; ++i)
+        {
+            if(!m_MissionSuccess[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void SetClose(int idx, bool val)
