@@ -14,7 +14,7 @@ public class SpeechController : MonoBehaviour
     }
     public bool SpeechFinished
     {
-        get { return m_ImgNum < SpeechImgs.Count ? false : true; }
+        get { return m_ImgNum < SpeechImgs.Count - 1 ? false : true; }
     }
     void Start()
     {
@@ -26,7 +26,7 @@ public class SpeechController : MonoBehaviour
     public void ShowSpeech()
     {
         ImageObject.GetComponent<Image>().sprite = SpeechImgs[m_ImgNum];
-        if(Input.GetKeyDown(KeyCode.Return))
+        if(Input.GetKeyDown(KeyCode.Return) && m_ImgNum < SpeechImgs.Count - 1)
         {
             m_ImgNum++;
         }

@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class HintmanMission : MonoBehaviour
 {
-    private Quaternion m_NewQuat;
     private GameObject m_PlayerObject, m_MissionObject, m_HintObject;
     private PyServer m_Server;
-    private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
-    private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
+    private SpeechController m_SC;
     private List<float> m_ScoreList = new List<float>();
     private float mf_MissionTimeElapsed = 0f;
     private bool mb_MissionSuccess = false;
-    private string[] m_EmotionNames = { "ANGRY", "DISGUST", "FEAR", "HAPPY", "SAD", "SUPRISED", "NEUTRAL" };
-    public int HintMissionNum = 5;
+    public int HintEmotionNum = 5;
     private bool mb_ShowMessage;
     public bool ShowMessage
     {
@@ -21,66 +18,56 @@ public class HintmanMission : MonoBehaviour
         set { mb_ShowMessage = value; }
     }
 
-
-
     void Start()
     {
         m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
         m_MissionObject = GameObject.FindGameObjectWithTag("Mission");
         m_HintObject = transform.Find("HintObject").gameObject;
+        m_SC = this.GetComponent<SpeechController>();
     }
 
     void Update()
     {
         m_HintObject.SetActive(mb_MissionSuccess);
         float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
-        if(!mb_MissionSuccess && distance < 5f)
+        if(!mb_MissionSuccess)
         {
-            mb_ShowMessage = true;
-            ThrowMission();
+            if(distance < 5f)
+            {
+                m_SC.SetSpeechActive(true);
+                m_SC.ShowSpeech();
+                if(m_SC.SpeechFinished)
+                {
+                    m_Server.ThrowMission(HintEmotionNum);
+                    if(m_Server.MissionSuccess)
+                    {
+                        m_Server.ClearMissionSettings();
+                    }
+                }
+            }
+            else
+            {
+                InitializeMissionSettings();
+                m_SC.SetSpeechActive(false);
+                m_SC.SpeechNum = 0;
+            }
         }
         else
         {
-            mb_ShowMessage = false;
-            if(mb_MissionSuccess)
+            m_SC.SetSpeechActive(false);
+
+            Vector3 target = m_PlayerObject.transform.position;
+            target.y = m_HintObject.transform.position.y;
+            if(distance < 5f)
             {
-                mf_MissionTimeElapsed = 0f;
-                Vector3 target = m_PlayerObject.transform.position;
-                target.y = m_HintObject.transform.position.y;
-                if(distance < 5f)
-                {
-                    m_HintObject.transform.position = Vector3.MoveTowards(m_HintObject.transform.position, target, Time.deltaTime * 3f);
-                }
-                else
-                {
-                    m_HintObject.transform.position = target;
-                }
+                m_HintObject.transform.position = Vector3.MoveTowards(m_HintObject.transform.position, target, Time.deltaTime * 3f);
+            }
+            else
+            {
+                m_HintObject.transform.position = target;
             }
         }
-    }
-
-
-    void ThrowMission()
-    {
-        float score = m_Server.GetScore(HintMissionNum);
-        if(mf_MissionTimeElapsed < 1f)
-        {
-            m_ScoreList.Add(score);
-        }
-        else
-        {
-            m_ScoreList.Add(score);
-            m_ScoreList.RemoveAt(0);
-
-            float avg_score = GetAverageScore();
-            if(avg_score > m_Server.GetThreshold(HintMissionNum))
-            {
-                mb_MissionSuccess = true;
-                mf_MissionTimeElapsed = 0f;
-            }
-        }
-        mf_MissionTimeElapsed += Time.deltaTime;
     }
 
     float GetAverageScore()
@@ -92,5 +79,11 @@ public class HintmanMission : MonoBehaviour
         }
         ret /= m_ScoreList.Count;
         return ret;
+    }
+
+    void InitializeMissionSettings()
+    {
+        mf_MissionTimeElapsed = 0f;
+        m_ScoreList.Clear();
     }
 }

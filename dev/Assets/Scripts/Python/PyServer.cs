@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PyServer : MonoBehaviour
@@ -15,6 +16,16 @@ public class PyServer : MonoBehaviour
     
     private float[] mf_Threshold = { 0.5f, 0.05f, 0.2f, 0.6f, 0.5f, 0.5f, 0.7f };
     private bool mb_Connected = false;
+
+    // Mission variables
+    private float mf_MissionTimeElapsed;
+    private List<float> m_ScoreList = new List<float>();
+    private bool mb_MissionSuccess;
+    public bool MissionSuccess
+    {
+        get { return mb_MissionSuccess; }
+    }
+
     
     public enum eEmotion
     {
@@ -98,6 +109,43 @@ public class PyServer : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ThrowMission(int emotionNum)
+    {
+        mf_MissionTimeElapsed += Time.deltaTime;
+        
+        float score = mf_EmotionScores[emotionNum];
+        if(mf_MissionTimeElapsed < 1f)
+        {
+            m_ScoreList.Add(score);
+        }
+        else
+        {
+            m_ScoreList.Add(score);
+            m_ScoreList.RemoveAt(0);
+
+            float avg_score = GetAverageScore();
+            mb_MissionSuccess = avg_score > mf_Threshold[emotionNum] ? true : false;
+        }
+    }
+
+    public void ClearMissionSettings()
+    {
+        mf_MissionTimeElapsed = 0f;
+        mb_MissionSuccess = false;
+        m_ScoreList.Clear();
+    }
+
+    float GetAverageScore()
+    {
+        float ret = 0f;
+        for(int i = 0; i < m_ScoreList.Count; ++i)
+        {
+            ret += m_ScoreList[i];
+        }
+        ret /= m_ScoreList.Count;
+        return ret;
     }
 
     public float GetScore(int idx) => mf_EmotionScores[idx];

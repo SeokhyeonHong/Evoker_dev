@@ -169,6 +169,5 @@ public class CharacterController : MonoBehaviour
     public void SetMovable(bool movable)
     {
         mb_Movable = movable;
-        Debug.Log("SetMovable() called: " + mb_Movable.ToString());
     }
 }

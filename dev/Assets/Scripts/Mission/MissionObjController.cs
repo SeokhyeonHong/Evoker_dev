@@ -37,15 +37,13 @@ public class MissionObjController : MonoBehaviour
             m_Text.text = "";
             if(dist < 5f)
             {
-                if(m_SC.SpeechFinished)
+                m_SC.SetSpeechActive(true);
+                m_SC.ShowSpeech();
+                m_Server.ThrowMission(MissionEmotion);
+                if(m_Server.MissionSuccess)
                 {
-                    m_SC.SetSpeechActive(false);
-                    ThrowMission();
-                }
-                else
-                {
-                    m_SC.SetSpeechActive(true);
-                    m_SC.ShowSpeech();
+                    m_MissionObject.GetComponent<MissionController>().SetMissionSuccess(MissionNum);
+                    m_Server.ClearMissionSettings();
                 }
             }
             else
@@ -68,41 +66,5 @@ public class MissionObjController : MonoBehaviour
 
         int color = success ? 1 : 0;
         this.GetComponent<ColorController>().SetColor(color);
-    }
-
-    void ThrowMission()
-    {
-        m_Text.text = "Make Facial Expressions!";
-        mf_MissionTimeElapsed += Time.deltaTime;
-        
-        float score = m_Server.GetScore(MissionEmotion);
-        if(mf_MissionTimeElapsed < 1f)
-        {
-            m_ScoreList.Add(score);
-        }
-        else
-        {
-            m_ScoreList.Add(score);
-            m_ScoreList.RemoveAt(0);
-
-            float avg_score = GetAverageScore();
-            if(avg_score > m_Server.GetThreshold(MissionEmotion))
-            {
-                m_MissionObject.GetComponent<MissionController>().SetMissionSuccess(MissionNum);
-                mf_MissionTimeElapsed = 0f;
-                m_ScoreList.Clear();
-            }
-        }
-    }
-
-    float GetAverageScore()
-    {
-        float ret = 0f;
-        for(int i = 0; i < m_ScoreList.Count; ++i)
-        {
-            ret += m_ScoreList[i];
-        }
-        ret /= m_ScoreList.Count;
-        return ret;
     }
 }
