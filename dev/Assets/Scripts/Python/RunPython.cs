@@ -18,7 +18,7 @@ public class RunPython : MonoBehaviour
         try
         {
             psi.StartInfo.FileName = "python"; // "C:/Users/VML/AppData/Local/Programs/Python/Python37/python.exe";
-            psi.StartInfo.Arguments = System.IO.Directory.GetCurrentDirectory() + "\\PyClient.py";// "C:/Users/VML/Desktop/21-2/Lectures/Game_Design_Project/Evoker_dev/dev/Assets/Scripts/Python/PyClient.py";
+            psi.StartInfo.Arguments = System.IO.Directory.GetCurrentDirectory() + "\\PyClient.py";
             psi.StartInfo.CreateNoWindow = true;
             psi.StartInfo.UseShellExecute = false;
             psi.Start();

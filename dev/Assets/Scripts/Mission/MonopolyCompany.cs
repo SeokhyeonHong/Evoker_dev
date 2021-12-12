@@ -11,7 +11,7 @@ public class MonopolyCompany : MonoBehaviour
     void Start()
     {
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
-        m_MC = transform.parent.gameObject.GetComponent<MissionController>();
+        m_MC = GameObject.FindGameObjectWithTag("Mission").GetComponent<MissionController>();
     }
 
     // Update is called once per frame

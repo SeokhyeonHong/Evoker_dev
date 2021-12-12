@@ -5,8 +5,6 @@ import os
 
 cap = cv2.VideoCapture(0)
 
-fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-out = cv2.VideoWriter(os.getcwd() + '\\output.avi', fourcc, 25.0, (1920, 1080))
 
 emotion_detector = FER()
 
@@ -27,11 +25,8 @@ while True:
         text = ""
         for index, (emotion_name, score) in enumerate(emotions.items()):
             val += "{:.2f}".format(score)
-            text = emotion_name + ": " + str(score)
-            cv2.putText(frame, text, (0, 30 + 15 * index), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1, cv2.LINE_AA,)
         # val = emotion_name + ' ' + str(emotion_score)
         
         sock.send(val.encode())
-    
+
     cv2.waitKey(33)
-    out.write(frame)

@@ -6,12 +6,12 @@ import os
 cap = cv2.VideoCapture(0)
 
 fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-out = cv2.VideoWriter(os.getcwd() + '\\output.avi', fourcc, 25.0, (1920, 1080))
+out = cv2.VideoWriter(os.path.dirname(os.path.realpath(__file__)) + '\\output.avi', fourcc, 25.0, (1920, 1080))
 
 emotion_detector = FER()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# sock.connect(("127.0.0.1", 50003))
+sock.connect(("127.0.0.1", 50003))
 
 while True: 
     retval, frame = cap.read()
@@ -31,8 +31,7 @@ while True:
             cv2.putText(frame, text, (0, 30 + 15 * index), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1, cv2.LINE_AA,)
         # val = emotion_name + ' ' + str(emotion_score)
         
-        # sock.send(val.encode())
-    
-    cv2.waitKey(33)
-    cv2.imshow("ff", frame)
+        sock.send(val.encode())
+
     out.write(frame)
+    cv2.waitKey(33)
