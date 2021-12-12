@@ -31,7 +31,7 @@ public class MissionController : MonoBehaviour
 
     void Start()
     {
-        // except the canvas and monopoly company
+        // except the canvas
         for(int i = 1; i < transform.childCount; ++i)
         {
             m_MissionObjects.Add(transform.GetChild(i).gameObject);
