@@ -11,12 +11,6 @@ public class HintmanMission : MonoBehaviour
     private float mf_MissionTimeElapsed = 0f;
     private bool mb_MissionSuccess = false;
     public int HintEmotionNum = 5;
-    private bool mb_ShowMessage;
-    public bool ShowMessage
-    {
-        get { return mb_ShowMessage; }
-        set { mb_ShowMessage = value; }
-    }
 
     void Start()
     {
@@ -30,6 +24,7 @@ public class HintmanMission : MonoBehaviour
     void Update()
     {
         m_HintObject.SetActive(mb_MissionSuccess);
+        
         float distance = Vector3.Distance(transform.position, m_PlayerObject.transform.position);
         if(!mb_MissionSuccess)
         {
@@ -42,13 +37,13 @@ public class HintmanMission : MonoBehaviour
                     m_Server.ThrowMission(HintEmotionNum);
                     if(m_Server.MissionSuccess)
                     {
+                        mb_MissionSuccess = true;
                         m_Server.ClearMissionSettings();
                     }
                 }
             }
             else
             {
-                InitializeMissionSettings();
                 m_SC.SetSpeechActive(false);
                 m_SC.SpeechNum = 0;
             }
@@ -68,22 +63,5 @@ public class HintmanMission : MonoBehaviour
                 m_HintObject.transform.position = target;
             }
         }
-    }
-
-    float GetAverageScore()
-    {
-        float ret = 0f;
-        for(int i = 0; i < m_ScoreList.Count; ++i)
-        {
-            ret += m_ScoreList[i];
-        }
-        ret /= m_ScoreList.Count;
-        return ret;
-    }
-
-    void InitializeMissionSettings()
-    {
-        mf_MissionTimeElapsed = 0f;
-        m_ScoreList.Clear();
     }
 }

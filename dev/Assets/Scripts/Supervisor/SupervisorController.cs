@@ -12,18 +12,10 @@ public class SupervisorController : MonoBehaviour
     private PyServer m_Server;
     private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
     private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
-    private List<float> m_ScoreList = new List<float>();
     private float mf_NextMoveTime = 0f, mf_MissionTimeElapsed = 0f;
     private bool mb_MissionFinished = false;
     private int[] mi_EmotionToIdx = {2, 3, 4, 0, 1};
-    private string[] m_EmotionNames = { "ANGRY", "DISGUST", "FEAR", "HAPPY", "SAD", "SUPRISED", "NEUTRAL" };
     public int MissionEmotionNum = 0;
-    private bool mb_ShowMessage;
-    public bool ShowMessage
-    {
-        get { return mb_ShowMessage; }
-        set { mb_ShowMessage = value; }
-    }
 
     void Start()
     {
@@ -42,18 +34,32 @@ public class SupervisorController : MonoBehaviour
         
         if(!mb_MissionFinished && distance < 5.0f)
         {
-            ThrowMission();
-            mb_ShowMessage = true;
-        }
-        else
-        {
-            mb_ShowMessage = false;
-            if(distance > 5.0f)
+            m_Animator.SetBool("bMoving", false);
+            if(m_Server.MissionTimeElapsed < 5f)
             {
-                Move();
-                mb_MissionFinished = false;
-                mf_MissionTimeElapsed = 0f;
+                m_PlayerObject.GetComponent<CharacterController>().SetMovable(false);
+                m_Server.ThrowMission(MissionEmotionNum);
+                if(m_Server.MissionSuccess)
+                {
+                    m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
+                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 1);
+                    mb_MissionFinished = true;
+                    m_Server.ClearMissionSettings();
+                }
             }
+            else
+            {
+                m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
+                m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 2);
+                mb_MissionFinished = true;
+                m_Server.ClearMissionSettings();
+            }
+        }
+        else if(distance > 5.0f)
+        {
+            Move();
+            mb_MissionFinished = false;
+            mf_MissionTimeElapsed = 0f;
         }
     }
 
@@ -129,53 +135,5 @@ public class SupervisorController : MonoBehaviour
         Vector3 target = new Vector3(mf_NewX, 0, mf_NewZ);
         transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * mf_Speed);
         transform.rotation = Quaternion.Slerp(transform.rotation, m_NewQuat, Time.deltaTime * Mathf.Abs(mf_Angle) * 0.05f);
-    }
-
-    void ThrowMission()
-    {
-        m_Animator.SetBool("bMoving", false);
-        if(mf_MissionTimeElapsed < 5f)
-        {
-            m_PlayerObject.GetComponent<CharacterController>().SetMovable(false);
-            mf_MissionTimeElapsed += Time.deltaTime;
-            
-            float score = m_Server.GetScore(MissionEmotionNum);
-            if(mf_MissionTimeElapsed < 1f)
-            {
-                m_ScoreList.Add(score);
-            }
-            else
-            {
-                m_ScoreList.Add(score);
-                m_ScoreList.RemoveAt(0);
-
-                float avg_score = GetAverageScore();
-                if(avg_score > m_Server.GetThreshold(MissionEmotionNum))
-                {
-                    m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
-                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 1);
-                    mb_MissionFinished = true;
-                    mf_MissionTimeElapsed = 0f;
-                }
-            }
-        }
-        else
-        {
-            m_PlayerObject.GetComponent<CharacterController>().SetMovable(true);
-            m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 2);
-            mb_MissionFinished = true;
-            mf_MissionTimeElapsed = 0f;
-        }
-    }
-
-    float GetAverageScore()
-    {
-        float ret = 0f;
-        for(int i = 0; i < m_ScoreList.Count; ++i)
-        {
-            ret += m_ScoreList[i];
-        }
-        ret /= m_ScoreList.Count;
-        return ret;
     }
 }

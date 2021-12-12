@@ -18,8 +18,12 @@ public class PyServer : MonoBehaviour
     private bool mb_Connected = false;
 
     // Mission variables
-    private float mf_MissionTimeElapsed;
-    private List<float> m_ScoreList = new List<float>();
+    private float mf_MissionTimeElapsed, mf_ScoreSum;
+    public float MissionTimeElapsed
+    {
+        get { return mf_MissionTimeElapsed; }
+    }
+    private Queue<float> m_ScoreQueue = new Queue<float>();
     private bool mb_MissionSuccess;
     public bool MissionSuccess
     {
@@ -118,14 +122,18 @@ public class PyServer : MonoBehaviour
         float score = mf_EmotionScores[emotionNum];
         if(mf_MissionTimeElapsed < 1f)
         {
-            m_ScoreList.Add(score);
+            m_ScoreQueue.Enqueue(score);
+            mf_ScoreSum += score;
         }
         else
         {
-            m_ScoreList.Add(score);
-            m_ScoreList.RemoveAt(0);
+            float dequeue_val = m_ScoreQueue.Dequeue();
+            mf_ScoreSum += (score - dequeue_val);
+            m_ScoreQueue.Enqueue(score);
 
-            float avg_score = GetAverageScore();
+            float avg_score = mf_ScoreSum / m_ScoreQueue.Count;
+            Debug.Log("score: " + score.ToString());
+            Debug.Log("avg: " + avg_score.ToString());
             mb_MissionSuccess = avg_score > mf_Threshold[emotionNum] ? true : false;
         }
     }
@@ -134,18 +142,7 @@ public class PyServer : MonoBehaviour
     {
         mf_MissionTimeElapsed = 0f;
         mb_MissionSuccess = false;
-        m_ScoreList.Clear();
-    }
-
-    float GetAverageScore()
-    {
-        float ret = 0f;
-        for(int i = 0; i < m_ScoreList.Count; ++i)
-        {
-            ret += m_ScoreList[i];
-        }
-        ret /= m_ScoreList.Count;
-        return ret;
+        m_ScoreQueue.Clear();
     }
 
     public float GetScore(int idx) => mf_EmotionScores[idx];
