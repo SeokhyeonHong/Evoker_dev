@@ -28,6 +28,7 @@ public class SpeechController : MonoBehaviour
     public void ShowSpeech()
     {
         ImageObject.GetComponent<Image>().sprite = SpeechImgs[m_ImgNum];
+        Debug.Log(ImageObject.GetComponent<Image>().sprite.name);
         if(Input.GetKeyDown(KeyCode.Return) && !mb_InMission)
         {
             m_ImgNum++;

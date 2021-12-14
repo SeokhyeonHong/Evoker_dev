@@ -16,7 +16,7 @@ public class PyServer : MonoBehaviour
     private string[] ms_EmotionNames = {"Angry", "Disgust", "Fear", "Happy", "Sad", "Surprised", "Neutral"};
     private string[] ms_FileNames = { "angry.csv", "disgust.csv", "fear.csv", "happy.csv", "sad.csv", "surprised.csv", "neutral.csv" };
     private StreamWriter[] m_Files = new StreamWriter[7];
-    private float[] mf_Threshold = { 0.5f, 0.05f, 0.2f, 0.6f, 0.5f, 0.5f, 0.7f };
+    private float[] mf_Threshold = { 0.5f, 0.05f, 0.2f, 0.5f, 0.4f, 0.5f, 0.7f };
     private bool mb_Connected = false;
 
     // Mission variables

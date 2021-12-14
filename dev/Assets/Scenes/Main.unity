@@ -22700,7 +22700,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 800}
+  m_SizeDelta: {x: 930, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &355383472
 MonoBehaviour:
@@ -25452,7 +25452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6907ad9395d2a9b4a827267ea6b96f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnterSceneName: MissionScene_Happy_Home
+  EnterSceneName: MissionScene_Surprised_Halloween
   MissionNum: 4
 --- !u!1 &406685281
 GameObject:
@@ -27339,7 +27339,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 800}
+  m_SizeDelta: {x: 930, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &433761318
 MonoBehaviour:
@@ -34977,7 +34977,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 800}
+  m_SizeDelta: {x: 930, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &551481427
 MonoBehaviour:
@@ -64986,7 +64986,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 800}
+  m_SizeDelta: {x: 930, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1067630305
 MonoBehaviour:
@@ -65149,6 +65149,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1069232291}
   m_Mesh: {fileID: 4300002, guid: aa8035fa128f0d04294a7f4e3a030e91, type: 3}
+--- !u!1 &1070986328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1070986329}
+  - component: {fileID: 1070986330}
+  m_Layer: 0
+  m_Name: MonopolyObjects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1070986329
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070986328}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1730887594942124465}
+  m_Father: {fileID: 2024587024}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1070986330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070986328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50da545e693cffa499bd8742fb678e80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1077257479
 GameObject:
   m_ObjectHideFlags: 0
@@ -85473,7 +85517,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1438511592}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -191.00299, y: 0.5, z: 127.000656}
+  m_LocalPosition: {x: -190, y: 0.5, z: 131}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -97799,7 +97843,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 800}
+  m_SizeDelta: {x: 930, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1630891386
 MonoBehaviour:
@@ -106542,7 +106586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6907ad9395d2a9b4a827267ea6b96f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnterSceneName: MissionScene_Surprise_Pub
+  EnterSceneName: MissionScene_Happy_Pub
   MissionNum: 1
 --- !u!1 &1795374796
 GameObject:
@@ -122345,7 +122389,7 @@ Transform:
   - {fileID: 205166011}
   - {fileID: 1342456016}
   - {fileID: 1840828893}
-  - {fileID: 1730887594942124465}
+  - {fileID: 1070986329}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -131938,7 +131982,6 @@ GameObject:
   - component: {fileID: 1730887594942124465}
   - component: {fileID: 1730887594940717775}
   - component: {fileID: 1730887594939696121}
-  - component: {fileID: 1730887594941827488}
   m_Layer: 0
   m_Name: Monopoly
   m_TagString: Untagged
@@ -131946,18 +131989,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1730887594941827488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730887594941827487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50da545e693cffa499bd8742fb678e80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1730887594942124465
 Transform:
   m_ObjectHideFlags: 0
@@ -131965,13 +131996,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730887594941827487}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -109.440475, y: -1.4085482, z: 208.7}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
-  m_Father: {fileID: 2024587024}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1070986329}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &1735168648299531884
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 public class MissionObjController : MonoBehaviour
 {
     public int MissionEmotion, MissionNum;
-    public GameObject TextObject;
-    private Text m_Text;
     private GameObject m_NPCObject, m_PlayerObject, m_MissionObject;
     private PyServer m_Server;
     private SpeechController m_SC;
@@ -23,7 +21,6 @@ public class MissionObjController : MonoBehaviour
         m_MissionObject = GameObject.FindGameObjectWithTag("Mission");
         m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
 
-        m_Text = TextObject.GetComponent<Text>();
         m_SC = this.GetComponent<SpeechController>();
     }
 
@@ -34,28 +31,36 @@ public class MissionObjController : MonoBehaviour
 
         if(!success)
         {
-            m_Text.text = "";
             if(dist < 5f)
             {
                 m_SC.SetSpeechActive(true);
                 m_SC.ShowSpeech();
-                m_Server.ThrowMission(MissionEmotion);
-                if(m_Server.MissionSuccess)
+                if(m_SC.InMission)
                 {
-                    m_MissionObject.GetComponent<MissionController>().SetMissionSuccess(MissionNum);
-                    m_Server.ClearMissionSettings();
+                    m_Server.ThrowMission(MissionEmotion);
+                    if(m_Server.MissionSuccess)
+                    {
+                        m_MissionObject.GetComponent<MissionController>().SetMissionSuccess(MissionNum);
+                        m_Server.ClearMissionSettings();
+                        m_SC.IncreaseSpeechNum();
+                    }
                 }
             }
             else
             {
-                m_SC.SetSpeechActive(false);
                 m_SC.SpeechNum = 0;
+                m_SC.SetSpeechActive(false);
             }
         }
         else
         {
-            m_Text.text = "Mission Success!";
-            m_SC.SetSpeechActive(false);
+            m_SC.SpeechNum = 2;
+            m_SC.SetSpeechActive(true);
+            m_SC.ShowSpeech();
+            if(Input.GetKey(KeyCode.Return))
+            {
+                Exit();
+            }
         }
 
         int color = success ? 1 : 0;
