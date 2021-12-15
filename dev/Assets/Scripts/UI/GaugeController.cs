@@ -4,8 +4,7 @@ using UnityEngine.UI;
 
 public class GaugeController : MonoBehaviour
 {
-    public int EmotionNum;
-    public Sprite[] GaugeImages = new Sprite[5];
+    public Sprite[] GaugeImages = new Sprite[10];
     private GameObject m_PlayerObject;
 
     void Start()
@@ -15,7 +14,7 @@ public class GaugeController : MonoBehaviour
 
     void Update()
     {
-        int gauge = m_PlayerObject.GetComponent<CharacterController>().GetEmotionGauge(EmotionNum);
+        int gauge = m_PlayerObject.GetComponent<CharacterController>().Gauge;
         if(gauge >= 1)
         {
             gameObject.GetComponent<Image>().sprite = GaugeImages[gauge - 1];

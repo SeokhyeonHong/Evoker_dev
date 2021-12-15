@@ -13,7 +13,12 @@ public class CharacterController : MonoBehaviour
     private float mf_Move = 1f;
     private bool mb_MoveLeft, mb_MoveRight, mb_MoveForward, mb_MoveBackward;
     private bool mb_Run, mb_Movable = true;
-    private int[] mi_Gauges = new int[5];
+    private int mi_Gauge = 10;
+    public int Gauge
+    {
+        get { return mi_Gauge; }
+        set { mi_Gauge = value; }
+    }
 
     void Awake()
     {
@@ -30,10 +35,6 @@ public class CharacterController : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_Camera = Camera.main;
         m_Camera.transform.rotation = Quaternion.AngleAxis(10f, Vector3.right);
-        for(int i = 0; i < mi_Gauges.Length; ++i)
-        {
-            mi_Gauges[i] = 5;
-        }
     }
 
     void Update()
@@ -167,15 +168,10 @@ public class CharacterController : MonoBehaviour
         m_Camera.transform.rotation = Quaternion.AngleAxis(10f, Vector3.right);
     }
 
-    public int GetEmotionGauge(int idx)
+    public void DecreaseGauge(int decrease)
     {
-        return mi_Gauges[idx];
-    }
-
-    public void DecreaseGauge(int idx, int decrease)
-    {
-        mi_Gauges[idx] -= decrease;
-        if(mi_Gauges[idx] <= 0)
+        mi_Gauge -= decrease;
+        if(mi_Gauge <= 0)
         {
             SceneManager.LoadScene("Outro_2");
         }

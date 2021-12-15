@@ -51,7 +51,7 @@ public class SupervisorController : MonoBehaviour
                     m_Server.ThrowMission(MissionEmotionNum);
                     if(m_Server.MissionSuccess)
                     {
-                        m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 1);
+                        m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(1);
                         mb_MissionFinished = true;
                         m_Server.ClearMissionSettings();
                         m_SC.IncreaseSpeechNum();
@@ -59,7 +59,7 @@ public class SupervisorController : MonoBehaviour
                 }
                 else
                 {
-                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(mi_EmotionToIdx[MissionEmotionNum], 2);
+                    m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(2);
                     mb_MissionFinished = true;
                     m_Server.ClearMissionSettings();
                     m_SC.IncreaseSpeechNum();
