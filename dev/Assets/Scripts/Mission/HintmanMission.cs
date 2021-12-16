@@ -7,6 +7,7 @@ public class HintmanMission : MonoBehaviour
     private GameObject m_PlayerObject, m_MissionObject, m_HintObject;
     private PyServer m_Server;
     private SpeechController m_SC;
+    private AudioSource m_AudioSource;
     private bool mb_MissionSuccess = false;
     public int HintEmotionNum = 5;
 
@@ -16,7 +17,8 @@ public class HintmanMission : MonoBehaviour
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
         m_MissionObject = GameObject.FindGameObjectWithTag("Mission");
         m_HintObject = transform.Find("HintObject").gameObject;
-        m_SC = this.GetComponent<SpeechController>();
+        m_SC = GetComponent<SpeechController>();
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -38,6 +40,7 @@ public class HintmanMission : MonoBehaviour
                         mb_MissionSuccess = true;
                         m_Server.ClearMissionSettings();
                         m_SC.IncreaseSpeechNum();
+                        m_AudioSource.Play();
                     }
                 }
             }

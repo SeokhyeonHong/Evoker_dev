@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 public class CharacterController : MonoBehaviour
 {
     Camera m_Camera;
-    private Vector3 m_CameraTrans = new Vector3(0, 6, -10);
+    private Vector3 m_CameraTrans = new Vector3(0, 12, -20);
     Animator m_Animator;
     private GameObject m_SupervisorGroup;
+    private AudioSource m_AudioSource;
     private float mf_Smooth = 5f;
     private float mf_Move = 1f;
     private bool mb_MoveLeft, mb_MoveRight, mb_MoveForward, mb_MoveBackward;
@@ -35,6 +36,7 @@ public class CharacterController : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_Camera = Camera.main;
         m_Camera.transform.rotation = Quaternion.AngleAxis(10f, Vector3.right);
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -147,10 +149,20 @@ public class CharacterController : MonoBehaviour
             m_Animator.SetBool("bMoving", true);
             if(mb_Run)
             {
+                m_AudioSource.pitch = 1.5f;
+                if(!m_AudioSource.isPlaying)
+                {
+                    m_AudioSource.Play();
+                }
                 m_Animator.SetBool("bRunning", true);
             }
             else
             {
+                m_AudioSource.pitch = 1;
+                if(!m_AudioSource.isPlaying)
+                {
+                    m_AudioSource.Play();
+                }
                 m_Animator.SetBool("bRunning", false);
             }
         }

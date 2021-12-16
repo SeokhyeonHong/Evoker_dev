@@ -21,14 +21,14 @@ EditorBuildSettings:
     path: Assets/Scenes/MissionScene_Angry_Shop.unity
     guid: 21dcff4c847a5ac49882caa4e3e16ef9
   - enabled: 1
-    path: Assets/Scenes/MissionScene_Happy_Pub.unity
-    guid: 2a01cb35e9d8bea4db3e742aec196f9b
-  - enabled: 1
     path: Assets/Scenes/MissionScene_Disgust_Toilet.unity
     guid: 4a7fcb940f91c2143b54ddee590f290f
   - enabled: 1
     path: Assets/Scenes/MissionScene_Sad_Hospital.unity
     guid: eb3ffc5547972824ca4978ca0616cb33
+  - enabled: 1
+    path: Assets/Scenes/MissionScene_Happy_Home.unity
+    guid: 283ce40c83c77664ba2b37243444dacc
   - enabled: 1
     path: Assets/Scenes/MissionScene_Surprised_Halloween.unity
     guid: 42ca2085c1a587549976025eb2eb0d88

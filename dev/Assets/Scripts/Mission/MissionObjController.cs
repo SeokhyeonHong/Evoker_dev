@@ -40,6 +40,7 @@ public class MissionObjController : MonoBehaviour
                     m_Server.ThrowMission(MissionEmotion);
                     if(m_Server.MissionSuccess)
                     {
+                        GetComponent<AudioSource>().Play();
                         m_MissionObject.GetComponent<MissionController>().SetMissionSuccess(MissionNum);
                         m_Server.ClearMissionSettings();
                         m_SC.IncreaseSpeechNum();

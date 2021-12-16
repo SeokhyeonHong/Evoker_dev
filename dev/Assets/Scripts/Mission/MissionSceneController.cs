@@ -24,6 +24,7 @@ public class MissionSceneController : MonoBehaviour
                 m_MC.InMission = true;
                 m_MC.EntryPosition = m_PlayerObject.transform.position;
                 m_PlayerObject.transform.position = Vector3.zero;
+                GetComponent<AudioSource>().Play();
                 SceneManager.LoadScene(EnterSceneName);
             }
         }

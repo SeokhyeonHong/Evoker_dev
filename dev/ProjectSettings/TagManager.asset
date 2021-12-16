@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Server
   - Mission
+  - Walls
   layers:
   - Default
   - TransparentFX

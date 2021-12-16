@@ -6,15 +6,17 @@ using UnityEngine;
 public class SupervisorController : MonoBehaviour
 {
     public GameObject moveRangeObject;
+    public AudioClip ComeHere, Success, Failure;
     private Animator m_Animator;
     private Quaternion m_NewQuat;
     private GameObject m_PlayerObject, m_ExclaimationObject, m_MissionTextObject;
+    private AudioSource m_AudioSource;
     private PyServer m_Server;
     private SpeechController m_SC;
     private float mf_MinX, mf_MinZ, mf_MaxX, mf_MaxZ;
     private float mf_NewX, mf_NewZ, mf_Angle, mf_Speed;
     private float mf_NextMoveTime = 0f, mf_MissionTimeElapsed = 0f;
-    private bool mb_MissionFinished = false, mb_PlayerMovable;
+    private bool mb_MissionFinished, mb_PlayerMovable, mb_AudioPlayed;
     public bool Movable
     {
         get { return mb_PlayerMovable; }
@@ -30,7 +32,8 @@ public class SupervisorController : MonoBehaviour
         m_PlayerObject = GameObject.FindGameObjectWithTag("Player");
         m_Server = GameObject.FindGameObjectWithTag("Server").GetComponent<PyServer>();
         m_ExclaimationObject = transform.Find("Exclaimation").gameObject;
-        m_SC = this.GetComponent<SpeechController>();
+        m_SC = GetComponent<SpeechController>();
+        m_AudioSource = GetComponent<AudioSource>();
         mf_Speed = 1.0f;
     }
 
@@ -44,6 +47,13 @@ public class SupervisorController : MonoBehaviour
             m_Animator.SetBool("bMoving", false);
             m_SC.SetSpeechActive(true);
             m_SC.ShowSpeech();
+            if(!mb_AudioPlayed)
+            {
+                mb_AudioPlayed = true;
+                m_AudioSource.clip = ComeHere;
+                m_AudioSource.Play();
+            }
+
             if(m_SC.InMission)
             {
                 if(m_Server.MissionTimeElapsed < 5f)
@@ -51,6 +61,13 @@ public class SupervisorController : MonoBehaviour
                     m_Server.ThrowMission(MissionEmotionNum);
                     if(m_Server.MissionSuccess)
                     {
+                        mb_AudioPlayed = false;
+                        if(!mb_AudioPlayed)
+                        {
+                            mb_AudioPlayed = true;
+                            m_AudioSource.clip = Success;
+                            m_AudioSource.Play();
+                        }
                         m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(1);
                         mb_MissionFinished = true;
                         m_Server.ClearMissionSettings();
@@ -59,6 +76,13 @@ public class SupervisorController : MonoBehaviour
                 }
                 else
                 {
+                    mb_AudioPlayed = false;
+                    if(!mb_AudioPlayed)
+                    {
+                        mb_AudioPlayed = true;
+                        m_AudioSource.clip = Failure;
+                        m_AudioSource.Play();
+                    }
                     m_PlayerObject.GetComponent<CharacterController>().DecreaseGauge(2);
                     mb_MissionFinished = true;
                     m_Server.ClearMissionSettings();
@@ -73,12 +97,13 @@ public class SupervisorController : MonoBehaviour
             mb_MissionFinished = false;
             mf_MissionTimeElapsed = 0f;
             m_SC.SpeechNum = 0;
+            mb_AudioPlayed = false;
         }
-
-        if(mb_MissionFinished)
+        else
         {
             m_SC.SetSpeechActive(true);
             m_SC.ShowSpeech();
+            mb_AudioPlayed = false;
         }
     }
 
